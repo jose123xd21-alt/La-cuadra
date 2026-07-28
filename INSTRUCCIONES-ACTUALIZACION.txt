@@ -1,0 +1,31 @@
+LA GRANJA DE LA ABUELA — ACTUALIZACIÓN INSTALABLE
+
+Sube estos 7 archivos a la raíz del repositorio La-cuadra y sustituye los anteriores:
+- index.html
+- manifest.webmanifest
+- service-worker.js
+- icon-192.png
+- icon-512.png
+- maskable-512.png
+- .nojekyll
+
+GitHub Pages debe seguir configurado como:
+- Source: Deploy from a branch
+- Branch: main
+- Folder: / (root)
+
+Después espera 2 o 3 minutos y abre:
+https://jose123xd21-alt.github.io/La-cuadra/?v=10
+
+En Android con Chrome:
+- Pulsa el botón Instalar de la propia aplicación.
+- Confirma Instalar.
+
+Cambios incluidos:
+- Aplicación PWA instalable con ventana independiente.
+- Nombre: La Granja de la Abuela.
+- Nuevo icono de cabrita con gallinas.
+- Título principal cambiado.
+- Subtítulo principal eliminado.
+- El total de huevos se puede escribir con el teclado o modificar con + y −.
+- Se conserva la configuración de Firebase y la clave local para no perder datos.

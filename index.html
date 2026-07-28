@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#18392e">
   <meta name="description" content="Gestión compartida de cabras, gallinas, huevos, pienso y partos.">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="La Cuadra">
+  <meta name="apple-mobile-web-app-title" content="La Granja de la Abuela">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="apple-touch-icon" href="./icons/icon-192.png">
-  <link rel="icon" href="./icons/icon-192.png">
-<title>La Cuadra — versión nueva</title>
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="icon" href="./icon-192.png">
+<title>La Granja de la Abuela</title>
 <style>
 :root{
   --green:#18392e;--green-2:#30634f;--background:#f5f0e6;--card:#fffdf8;
@@ -30,7 +31,7 @@ button{cursor:pointer}.hidden{display:none!important}
 .app{width:min(1120px,100%);margin:auto;padding:18px 18px 112px}
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}
 .brand{display:flex;align-items:center;gap:11px}
-.logo{width:47px;height:47px;border-radius:17px;background:var(--green);color:white;display:grid;place-items:center;font-size:24px;box-shadow:var(--shadow)}
+.logo{width:52px;height:52px;border-radius:17px;background:var(--green);overflow:hidden;box-shadow:var(--shadow);flex:0 0 auto}.logo img{display:block;width:100%;height:100%;object-fit:cover}
 .brand strong{display:block;font-size:19px}.brand small{display:block;color:var(--muted);margin-top:2px}
 .top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .top-button,.status-pill{
@@ -115,7 +116,7 @@ button{cursor:pointer}.hidden{display:none!important}
 .egg-counter{display:grid;grid-template-columns:1fr auto;align-items:center;gap:15px;background:linear-gradient(145deg,#fffdf8,#f2e9d9);border:1px solid var(--line);border-radius:26px;padding:20px;margin-bottom:15px;box-shadow:var(--shadow)}
 .egg-counter h2{margin:0}.egg-counter p{margin:5px 0 0;color:var(--muted);font-size:13px}
 .stepper{display:flex;align-items:center;gap:12px}.stepper button{width:44px;height:44px;border:0;border-radius:15px;background:var(--green);color:white;font-size:23px}
-.stepper b{font-size:34px;min-width:43px;text-align:center}.gold-button{width:100%;margin-top:12px;border:0;border-radius:15px;padding:13px;background:var(--gold);color:#4b3410;font-weight:950}
+.stepper input{width:96px;height:58px;border:2px solid #b7c8b1;border-radius:16px;background:#fffdf8;color:var(--green);font-size:34px;font-weight:900;text-align:center;outline:none}.stepper input:focus{border-color:var(--green);box-shadow:0 0 0 4px #30634f1f}.stepper input::-webkit-outer-spin-button,.stepper input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}.stepper input[type=number]{-moz-appearance:textfield}.gold-button{width:100%;margin-top:12px;border:0;border-radius:15px;padding:13px;background:var(--gold);color:#4b3410;font-weight:950}
 .feed-metrics{margin-bottom:15px}.feed-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;border:1px solid var(--line);background:var(--card);border-radius:19px;padding:15px}
 .feed-icon{width:44px;height:44px;border-radius:14px;background:#f2e8d6;display:grid;place-items:center}.feed-row strong,.feed-row small{display:block}.feed-row small{color:var(--muted);margin-top:3px}.money{font-weight:950}
 .empty{text-align:center;color:var(--muted);padding:25px;border:1px dashed var(--line);border-radius:19px;background:#ffffff55}
@@ -229,9 +230,9 @@ button{cursor:pointer}.hidden{display:none!important}
   <div class="app">
     <header class="topbar">
       <div class="brand">
-        <div class="logo">🌿</div>
+        <div class="logo"><img src="./icon-192.png" alt=""></div>
         <div>
-          <strong>La Cuadra</strong>
+          <strong>La Granja de la Abuela</strong>
           <small>Gestión compartida de animales</small>
         </div>
       </div>
@@ -246,8 +247,8 @@ button{cursor:pointer}.hidden{display:none!important}
       <section class="view active" id="homeView">
         <div class="hero">
           <small>Resumen de hoy</small>
-          <h1>Todo el corral, sincronizado.</h1>
-          <p>Cabras, gallinas, huevos, pienso y calendario de partos desde vuestros dos móviles.</p>
+          <h1>La Granja de la Abuela</h1>
+          
         </div>
 
         <div class="offline-banner hidden" id="offlineBanner">
@@ -351,7 +352,7 @@ button{cursor:pointer}.hidden{display:none!important}
           </div>
           <div class="stepper">
             <button id="eggMinus" type="button">−</button>
-            <b id="quickEggValue">0</b>
+            <input id="quickEggValue" type="number" min="0" step="1" inputmode="numeric" pattern="[0-9]*" value="0" aria-label="Total de huevos de hoy">
             <button id="eggPlus" type="button">+</button>
           </div>
         </article>
@@ -447,7 +448,7 @@ button{cursor:pointer}.hidden{display:none!important}
   let persistentLocalCache, persistentMultipleTabManager;
   let doc, collection, setDoc, getDoc, getDocs, onSnapshot, serverTimestamp;
 
-  const APP_VERSION = 9;
+  const APP_VERSION = 10;
   const LOCAL_KEY = "laCuadraPwaStateV9";
   const PENDING_KEY = "laCuadraPendingDocumentsV9";
   const DOCUMENT_KEYS = [
@@ -775,7 +776,7 @@ button{cursor:pointer}.hidden{display:none!important}
     renderFeed();
     renderHistory();
     quickEggs = eggsToday();
-    $("quickEggValue").textContent = quickEggs;
+    if (document.activeElement !== $("quickEggValue")) $("quickEggValue").value = quickEggs;
     $("offlineBanner").classList.toggle("hidden", navigator.onLine);
   }
 
@@ -1467,7 +1468,7 @@ button{cursor:pointer}.hidden{display:none!important}
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `la-cuadra-${todayISO()}.json`;
+    link.download = `la-granja-de-la-abuela-${todayISO()}.json`;
     link.click();
     URL.revokeObjectURL(url);
   }
@@ -1482,7 +1483,7 @@ button{cursor:pointer}.hidden{display:none!important}
       closeSheet();
       commit(DOCUMENT_KEYS, "Datos importados");
     } catch {
-      alert("El archivo no parece una copia válida de La Cuadra.");
+      alert("El archivo no parece una copia válida de La Granja de la Abuela.");
     }
   }
 
@@ -1490,7 +1491,7 @@ button{cursor:pointer}.hidden{display:none!important}
     const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
     const installed = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
     if (installed) {
-      toast("La Cuadra ya está instalada");
+      toast("La Granja de la Abuela ya está instalada");
       return;
     }
 
@@ -1503,7 +1504,7 @@ button{cursor:pointer}.hidden{display:none!important}
       return;
     }
 
-    openSheet("Instalar La Cuadra", isIOS
+    openSheet("Instalar La Granja de la Abuela", isIOS
       ? `<div class="install-steps">
           <div class="install-step"><b>1</b><div>Abre esta página con <strong>Safari</strong>.</div></div>
           <div class="install-step"><b>2</b><div>Pulsa el botón <strong>Compartir</strong>.</div></div>
@@ -2134,15 +2135,30 @@ button{cursor:pointer}.hidden{display:none!important}
   });
   $("addCalendarEvent").addEventListener("click", () => openCalendarEventForm(selectedCalendarDate));
 
+  function readQuickEggValue() {
+    const value = Number.parseInt($("quickEggValue").value, 10);
+    quickEggs = Number.isFinite(value) ? Math.max(0, value) : 0;
+    return quickEggs;
+  }
+
+  $("quickEggValue").addEventListener("input", readQuickEggValue);
+  $("quickEggValue").addEventListener("blur", () => {
+    readQuickEggValue();
+    $("quickEggValue").value = quickEggs;
+  });
   $("eggMinus").addEventListener("click", () => {
+    readQuickEggValue();
     quickEggs = Math.max(0, quickEggs - 1);
-    $("quickEggValue").textContent = quickEggs;
+    $("quickEggValue").value = quickEggs;
   });
   $("eggPlus").addEventListener("click", () => {
+    readQuickEggValue();
     quickEggs += 1;
-    $("quickEggValue").textContent = quickEggs;
+    $("quickEggValue").value = quickEggs;
   });
   $("saveQuickEggs").addEventListener("click", () => {
+    readQuickEggValue();
+    $("quickEggValue").value = quickEggs;
     state.eggs = state.eggs.filter((entry) => !(entry.date === todayISO() && entry.dailyTotal));
     state.eggs.push({
       id: uid("egg"),
@@ -2168,7 +2184,7 @@ button{cursor:pointer}.hidden{display:none!important}
 
   window.addEventListener("appinstalled", () => {
     deferredInstallPrompt = null;
-    toast("La Cuadra se ha instalado");
+    toast("La Granja de la Abuela se ha instalado");
   });
 
   window.addEventListener("online", () => {
@@ -2194,6 +2210,7 @@ button{cursor:pointer}.hidden{display:none!important}
   }, 60000);
 
   handleInitialView();
+  registerServiceWorker();
   renderAll();
   setTimeout(() => {
     initCloud();
