@@ -1,0 +1,2205 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#18392e">
+  <meta name="description" content="Gestión compartida de cabras, gallinas, huevos, pienso y partos.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="La Cuadra">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="icon" href="./icons/icon-192.png">
+<title>La Cuadra — versión nueva</title>
+<style>
+:root{
+  --green:#18392e;--green-2:#30634f;--background:#f5f0e6;--card:#fffdf8;
+  --line:#e7ddcd;--muted:#718078;--gold:#e8af4d;--red:#b84c4c;
+  --blue:#4a7fc6;--shadow:0 16px 45px #18392e18
+}
+*{box-sizing:border-box}
+html{background:var(--background)}
+body{
+  margin:0;color:#1c332b;background:
+  radial-gradient(circle at top right,#e8af4d22,transparent 30rem),var(--background);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}.hidden{display:none!important}
+.app{width:min(1120px,100%);margin:auto;padding:18px 18px 112px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:47px;height:47px;border-radius:17px;background:var(--green);color:white;display:grid;place-items:center;font-size:24px;box-shadow:var(--shadow)}
+.brand strong{display:block;font-size:19px}.brand small{display:block;color:var(--muted);margin-top:2px}
+.top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.top-button,.status-pill{
+  border:1px solid var(--line);background:#fffaf4;border-radius:999px;padding:9px 12px;
+  color:var(--green);font-size:12px;font-weight:850
+}
+.status-pill{cursor:pointer}.status-pill.online{background:#e5f1e9;color:#285d48;border-color:#cbe1d3}
+.status-pill.syncing{background:#fff0d3;color:#79561c;border-color:#efd19b}
+.status-pill.offline{background:#f8e1e1;color:#8b3b3b;border-color:#ebc3c3}
+.status-pill.local{background:#efeeeb;color:#68736e}
+.view{display:none}.view.active{display:block}
+.hero{padding:25px;border-radius:31px;background:linear-gradient(135deg,var(--green),#2d604c);color:white;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"🐐";position:absolute;right:22px;bottom:-20px;font-size:120px;opacity:.12}
+.hero small{text-transform:uppercase;letter-spacing:.1em;font-weight:900;opacity:.72}
+.hero h1{font-size:clamp(32px,6vw,54px);line-height:.98;letter-spacing:-.055em;margin:8px 0;max-width:680px}
+.hero p{margin:0;opacity:.82;max-width:660px}
+.offline-banner{margin:14px 0;background:#f8e1e1;border:1px solid #ebc3c3;color:#803b3b;border-radius:17px;padding:12px 14px;font-size:13px}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:15px 0 24px}
+.quick-card{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:15px;text-align:left;color:#1c332b;box-shadow:0 8px 24px #18392e0c}
+.quick-card i{font-style:normal;width:42px;height:42px;border-radius:14px;background:#edf3ef;display:grid;place-items:center;font-size:22px;margin-bottom:10px}
+.quick-card b,.quick-card span{display:block}.quick-card span{font-size:12px;color:var(--muted);margin-top:3px}
+.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin:24px 0 11px}
+.section-head.compact{margin:0 0 13px}.section-head h2{margin:0;font-size:24px;letter-spacing:-.035em}
+.section-head.compact h2{font-size:19px}.section-head p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.two-columns{display:grid;grid-template-columns:1.1fr .9fr;gap:15px}
+.card,.calendar-card,.selected-day-card{
+  background:var(--card);border:1px solid var(--line);border-radius:24px;padding:19px;
+  box-shadow:0 10px 30px #18392e0d
+}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.metric{background:#f2ede3;border-radius:18px;padding:14px;min-width:0}
+.metric b{display:block;font-size:28px;letter-spacing:-.04em;overflow-wrap:anywhere}
+.metric span{font-size:12px;color:var(--muted);font-weight:750}
+.stack{display:grid;gap:10px}
+.birth-row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:18px;padding:13px}
+.avatar{width:45px;height:45px;border-radius:15px;background:#edf3ef;display:grid;place-items:center;font-size:23px}
+.birth-row strong,.activity-row strong{display:block}.birth-row small,.activity-row span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+.days-left{background:#fff0d4;color:#805715;border-radius:15px;padding:8px;text-align:center;min-width:72px;font-weight:900;font-size:11px}
+.days-left b{display:block;font-size:21px}.days-left.late{background:#fae1e1;color:#913b3b}.days-left.today{background:#e1efe7;color:#285c49}
+.activity-row{display:grid;grid-template-columns:auto 1fr;gap:11px;padding:10px 0;border-bottom:1px solid var(--line)}
+.activity-row:last-child{border-bottom:0}.activity-icon{width:38px;height:38px;border-radius:13px;background:#edf3ef;display:grid;place-items:center}
+.page-title{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:8px 0 18px}
+.page-title h1{margin:0;font-size:clamp(32px,6vw,48px);letter-spacing:-.05em}.page-title p{margin:6px 0 0;color:var(--muted)}
+.round-add{border:0;background:var(--green);color:white;width:49px;height:49px;border-radius:17px;font-size:26px;box-shadow:var(--shadow);flex:none}
+.filter-tabs{display:flex;gap:7px;overflow:auto;margin-bottom:15px;scrollbar-width:none}.filter-tabs::-webkit-scrollbar{display:none}
+.filter-chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:9px 13px;color:var(--muted);font-weight:850;white-space:nowrap}
+.filter-chip.active{background:var(--green);color:white;border-color:var(--green)}
+.animal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.animal-card{border:1px solid var(--line);background:var(--card);border-radius:23px;padding:17px;box-shadow:0 10px 28px #18392e0c}
+.animal-head{display:flex;justify-content:space-between;gap:10px}.animal-card h3{margin:0;font-size:20px}
+.subtext{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.45}
+.more-button{border:0;background:#f0ebe2;width:34px;height:34px;border-radius:11px;color:var(--muted);font-weight:900}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:13px 0}.tag{font-size:11px;font-weight:850;padding:6px 9px;border-radius:999px;background:#edf3ef;color:var(--green-2)}
+.tag.gold{background:#fff0d4;color:#805715}.tag.gray{background:#efeeeb;color:#68736e}.tag.blue{background:#e8f0fb;color:#365f94}
+.animal-foot{border-top:1px solid var(--line);padding-top:12px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.text-button{border:0;background:transparent;color:var(--green-2);font-weight:900;padding:5px}
+.ring{width:18px;height:18px;border-radius:50%;border:3px solid currentColor;display:inline-block;vertical-align:-5px;margin-right:5px}
+.calendar-card{margin-top:16px}.calendar-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.calendar-head h2{margin:0;font-size:22px}.calendar-head p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.calendar-nav{display:flex;gap:7px}.calendar-nav button{border:1px solid var(--line);background:white;border-radius:12px;min-width:38px;height:38px;padding:0 10px;font-weight:900;color:var(--green)}
+.calendar-title{font-weight:950;margin-bottom:10px;text-transform:capitalize}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.weekday{font-size:11px;text-align:center;color:var(--muted);font-weight:900;padding:4px}
+.calendar-day{min-height:82px;border:1px solid var(--line);border-radius:12px;padding:7px;background:white;text-align:left;color:#1c332b;overflow:hidden}
+.calendar-day.outside{opacity:.35}.calendar-day.today{border-color:var(--green-2);box-shadow:inset 0 0 0 1px var(--green-2)}
+.calendar-day.selected{background:#e8f0eb;border-color:var(--green)}
+.calendar-number{font-size:12px;font-weight:900;display:flex;align-items:center;justify-content:space-between}
+.event-count{font-size:9px;background:var(--green);color:white;border-radius:999px;padding:2px 5px}
+.calendar-event-preview{display:block;margin-top:5px;padding:4px 5px;border-radius:7px;background:#fff0d4;color:#775017;font-size:9px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.selected-day-card{margin-top:12px}.selected-day-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:13px}
+.selected-day-head small{color:var(--muted);font-weight:850}.selected-day-head h2{margin:3px 0 0;font-size:21px;text-transform:capitalize}
+.secondary-inline{border:1px solid var(--line);background:white;border-radius:13px;padding:10px 12px;color:var(--green);font-weight:850}
+.day-event{display:grid;grid-template-columns:auto 1fr auto;gap:11px;align-items:start;border:1px solid var(--line);border-radius:16px;padding:12px;background:white}
+.day-event-icon{width:38px;height:38px;border-radius:12px;background:#edf3ef;display:grid;place-items:center}
+.day-event strong{display:block}.day-event small{display:block;color:var(--muted);margin-top:3px;line-height:1.4}
+.delete-icon{border:0;background:transparent;color:var(--red);font-weight:900;padding:5px}
+.pregnancy-card{border:1px solid var(--line);border-radius:19px;padding:15px;background:white}
+.pregnancy-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.pregnancy-top strong{display:block}.pregnancy-top small{display:block;color:var(--muted);margin-top:3px}
+.progress{height:9px;background:#ece8df;border-radius:999px;overflow:hidden;margin:13px 0}.progress div{height:100%;background:var(--green-2);border-radius:999px}
+.row-actions{display:flex;gap:8px;flex-wrap:wrap}.row-actions button{border:1px solid var(--line);background:white;border-radius:11px;padding:8px 10px;color:var(--green);font-weight:850;font-size:12px}
+.row-actions button.danger{color:var(--red)}
+.egg-counter{display:grid;grid-template-columns:1fr auto;align-items:center;gap:15px;background:linear-gradient(145deg,#fffdf8,#f2e9d9);border:1px solid var(--line);border-radius:26px;padding:20px;margin-bottom:15px;box-shadow:var(--shadow)}
+.egg-counter h2{margin:0}.egg-counter p{margin:5px 0 0;color:var(--muted);font-size:13px}
+.stepper{display:flex;align-items:center;gap:12px}.stepper button{width:44px;height:44px;border:0;border-radius:15px;background:var(--green);color:white;font-size:23px}
+.stepper b{font-size:34px;min-width:43px;text-align:center}.gold-button{width:100%;margin-top:12px;border:0;border-radius:15px;padding:13px;background:var(--gold);color:#4b3410;font-weight:950}
+.feed-metrics{margin-bottom:15px}.feed-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;border:1px solid var(--line);background:var(--card);border-radius:19px;padding:15px}
+.feed-icon{width:44px;height:44px;border-radius:14px;background:#f2e8d6;display:grid;place-items:center}.feed-row strong,.feed-row small{display:block}.feed-row small{color:var(--muted);margin-top:3px}.money{font-weight:950}
+.empty{text-align:center;color:var(--muted);padding:25px;border:1px dashed var(--line);border-radius:19px;background:#ffffff55}
+.history-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:15px}.spaced-card{margin-top:15px}
+.timeline{position:relative;padding-left:25px}.timeline:before{content:"";position:absolute;left:8px;top:7px;bottom:7px;width:2px;background:#d8cfbf}
+.timeline-item{position:relative;padding:0 0 20px}.timeline-item:before{content:"";position:absolute;left:-22px;top:7px;width:12px;height:12px;border-radius:50%;background:var(--gold);border:3px solid var(--card);box-shadow:0 0 0 1px #d4c5a9}
+.timeline-item:last-child{padding-bottom:0}.timeline-item h3{margin:0 0 6px;font-size:20px}.timeline-item p{margin:0;line-height:1.5;color:#405149}
+.name-chips{display:flex;flex-wrap:wrap;gap:8px}.name-chip{padding:8px 11px;border-radius:999px;background:#edf3ef;color:var(--green-2);font-weight:850;font-size:13px}
+.name-chip.archived{background:#efeeeb;color:#68736e}
+.bottom-nav{position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(650px,calc(100% - 22px));padding:8px;display:grid;grid-template-columns:repeat(5,1fr);background:#fffdf8ee;backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:23px;box-shadow:0 18px 55px #18392e2b;z-index:40}
+.bottom-nav button{border:0;background:transparent;border-radius:16px;padding:8px 2px;color:#7a8882;font-size:10px;font-weight:850}.bottom-nav b{display:block;font-size:20px;margin-bottom:3px}.bottom-nav button.active{background:var(--green);color:white}
+.floating-add{position:fixed;right:22px;bottom:101px;width:58px;height:58px;border:0;border-radius:20px;background:var(--gold);font-size:30px;color:#48310f;box-shadow:0 15px 34px #80571544;z-index:35}
+.overlay{position:fixed;inset:0;background:#10211c88;backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;padding:12px;z-index:80}
+.sheet{width:min(640px,100%);max-height:92vh;overflow:auto;background:var(--card);border-radius:29px 29px 21px 21px;box-shadow:0 -20px 70px #0004}
+.sheet-head{position:sticky;top:0;background:#fffdf8ee;backdrop-filter:blur(16px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:18px 19px;z-index:2}
+.sheet-head h2{margin:0}.close-button{border:0;width:38px;height:38px;border-radius:13px;background:#f0ebe2;font-size:21px}.sheet-body{padding:18px}
+.action-menu{display:grid;grid-template-columns:1fr 1fr;gap:10px}.action-option{border:1px solid var(--line);background:white;border-radius:18px;padding:16px;text-align:left;color:#1c332b}
+.action-option b{font-size:23px;display:block;margin-bottom:8px}.action-option strong,.action-option span{display:block}.action-option span{font-size:12px;color:var(--muted);margin-top:3px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field.full{grid-column:1/-1}.field label{display:block;color:var(--muted);font-size:12px;font-weight:850;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;min-height:45px;border:1px solid var(--line);border-radius:14px;background:white;padding:11px 12px;outline:none}
+.field textarea{min-height:82px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green-2);box-shadow:0 0 0 3px #30634f1c}
+.primary-button,.secondary-button{width:100%;border-radius:15px;padding:13px;margin-top:13px;font-weight:950}
+.primary-button{border:0;background:var(--green);color:white}.secondary-button{border:1px solid var(--line);background:white;color:var(--green)}.danger-text{color:var(--red)!important}
+.auth-note{padding:13px 14px;border-radius:16px;background:#edf3ef;color:#345446;font-size:13px;line-height:1.45;margin-bottom:13px}
+.warning-note{padding:13px 14px;border-radius:16px;background:#fff0d3;color:#79561c;border:1px solid #efd19b;font-size:13px;line-height:1.45;margin-bottom:13px}
+.account-summary{border:1px solid var(--line);border-radius:18px;padding:15px;background:white;margin-bottom:12px}.account-summary strong,.account-summary span{display:block}.account-summary span{color:var(--muted);margin-top:4px;font-size:13px}
+.code-box{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px dashed var(--green-2);background:#edf3ef;border-radius:16px;padding:13px;margin:12px 0}
+.code-box b{font-size:23px;letter-spacing:.12em}.code-box button{border:0;background:white;border-radius:11px;padding:8px 10px;color:var(--green);font-weight:850}
+.install-steps{display:grid;gap:10px}.install-step{display:grid;grid-template-columns:auto 1fr;gap:10px;border:1px solid var(--line);border-radius:15px;padding:12px}.install-step b{width:28px;height:28px;border-radius:10px;background:var(--green);color:white;display:grid;place-items:center}
+.toast{position:fixed;left:50%;top:16px;transform:translate(-50%,-20px);opacity:0;background:var(--green);color:white;padding:11px 15px;border-radius:999px;font-size:13px;font-weight:850;z-index:100;transition:.2s;max-width:calc(100% - 30px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:900px){.two-columns,.history-layout{grid-template-columns:1fr}.animal-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){
+  .app{padding:14px 13px 108px}.topbar{align-items:flex-start}.brand small{display:none}.top-actions{gap:5px}
+  .top-button,.status-pill{padding:8px 9px;font-size:11px}.hero{padding:21px 18px;border-radius:26px}.hero h1{font-size:36px}
+  .quick-grid{grid-template-columns:1fr 1fr}.animal-grid{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}
+  .egg-counter{grid-template-columns:1fr}.stepper{justify-content:space-between}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}
+  .floating-add{right:15px}.action-menu{grid-template-columns:1fr 1fr}.calendar-day{min-height:67px;padding:5px}
+  .calendar-event-preview{font-size:8px}.selected-day-head{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:420px){.action-menu{grid-template-columns:1fr}.bottom-nav{width:calc(100% - 14px)}.calendar-nav #calendarToday{display:none}.calendar-day{min-height:58px}.event-count{display:none}}
+
+
+  .fatal-error-banner {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: 12px;
+    z-index: 99999;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #fff1f0;
+    border: 2px solid #b42318;
+    color: #7a271a;
+    font: 700 14px/1.4 system-ui, sans-serif;
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    display: none;
+    white-space: pre-wrap;
+  }
+
+</style>
+</head>
+<body>
+<div id="fatalErrorBanner" class="fatal-error-banner"></div>
+
+<script>
+(function () {
+  function showFatal(message) {
+    var banner = document.getElementById("fatalErrorBanner");
+    if (!banner) return;
+    banner.style.display = "block";
+    banner.textContent = "La aplicación ha detectado este error:\n" + message;
+  }
+
+  window.addEventListener("error", function (event) {
+    showFatal(
+      (event.message || "Error desconocido") +
+      (event.filename ? "\nArchivo: " + event.filename : "") +
+      (event.lineno ? "\nLínea: " + event.lineno : "")
+    );
+  });
+
+  window.addEventListener("unhandledrejection", function (event) {
+    var reason = event.reason;
+    showFatal(reason && reason.message ? reason.message : String(reason || "Error de conexión"));
+  });
+
+  // Elimina service workers y cachés antiguos sin borrar los datos de animales.
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.getRegistrations()
+      .then(function (registrations) {
+        return Promise.all(registrations.map(function (registration) {
+          return registration.unregister();
+        }));
+      })
+      .catch(function () {});
+  }
+
+  if ("caches" in window) {
+    caches.keys()
+      .then(function (names) {
+        return Promise.all(names.map(function (name) {
+          return caches.delete(name);
+        }));
+      })
+      .catch(function () {});
+  }
+})();
+</script>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">🌿</div>
+        <div>
+          <strong>La Cuadra</strong>
+          <small>Gestión compartida de animales</small>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="status-pill local" id="syncStatus" type="button">● Local</button>
+        <button class="top-button" id="installButton" type="button">⬇ Instalar</button>
+        <button class="top-button" id="accountButton" type="button">👤 Conectar</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="view active" id="homeView">
+        <div class="hero">
+          <small>Resumen de hoy</small>
+          <h1>Todo el corral, sincronizado.</h1>
+          <p>Cabras, gallinas, huevos, pienso y calendario de partos desde vuestros dos móviles.</p>
+        </div>
+
+        <div class="offline-banner hidden" id="offlineBanner">
+          Estás sin conexión. Los cambios se guardarán en el móvil y se enviarán cuando vuelva internet.
+        </div>
+
+        <div class="quick-grid">
+          <button class="quick-card" data-action="egg" type="button"><i>🥚</i><b>Anotar huevos</b><span>Registro diario</span></button>
+          <button class="quick-card" data-action="pregnancy" type="button"><i>📅</i><b>Nueva cubrición</b><span>Calcula el parto</span></button>
+          <button class="quick-card" data-action="feed" type="button"><i>🌾</i><b>Apuntar pienso</b><span>Kilos y gasto</span></button>
+          <button class="quick-card" data-action="birth" type="button"><i>🍼</i><b>Registrar parto</b><span>Nacimientos</span></button>
+        </div>
+
+        <div class="section-head">
+          <div><h2>Hoy</h2><p>Lo importante de la explotación</p></div>
+        </div>
+
+        <div class="two-columns">
+          <article class="card">
+            <div class="metrics">
+              <div class="metric"><b id="metricGoats">0</b><span>cabras actuales</span></div>
+              <div class="metric"><b id="metricHens">0</b><span>gallinas</span></div>
+              <div class="metric"><b id="metricEggs">0</b><span>huevos hoy</span></div>
+            </div>
+            <div class="section-head compact">
+              <div><h2>Próximos partos</h2><p>Cuenta atrás automática</p></div>
+            </div>
+            <div class="stack" id="homePregnancies"></div>
+          </article>
+
+          <article class="card">
+            <div class="section-head compact">
+              <div><h2>Últimos movimientos</h2><p>Actividad de los dos móviles</p></div>
+            </div>
+            <div id="homeActivity"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="goatsView">
+        <div class="page-title">
+          <div><h1>Cabras</h1><p>Fichas, parentescos, gestaciones y partos.</p></div>
+          <button class="round-add" data-action="goat" type="button">+</button>
+        </div>
+
+        <div class="filter-tabs" id="goatFilters">
+          <button class="filter-chip active" data-filter="Todas" type="button">Todas</button>
+          <button class="filter-chip" data-filter="Gestante" type="button">Gestantes</button>
+          <button class="filter-chip" data-filter="Activo" type="button">Activos</button>
+          <button class="filter-chip" data-filter="Lactación" type="button">Lactación</button>
+          <button class="filter-chip" data-filter="Baja" type="button">Bajas</button>
+        </div>
+
+        <div class="animal-grid" id="goatGrid"></div>
+
+        <article class="calendar-card">
+          <div class="calendar-head">
+            <div>
+              <h2>Calendario</h2>
+              <p>Selecciona cualquier día para consultar todos sus eventos.</p>
+            </div>
+            <div class="calendar-nav">
+              <button id="calendarPrevious" type="button" aria-label="Mes anterior">‹</button>
+              <button id="calendarToday" type="button">Hoy</button>
+              <button id="calendarNext" type="button" aria-label="Mes siguiente">›</button>
+            </div>
+          </div>
+          <div class="calendar-title" id="calendarTitle"></div>
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </article>
+
+        <article class="selected-day-card">
+          <div class="selected-day-head">
+            <div>
+              <small>Día seleccionado</small>
+              <h2 id="selectedDayTitle"></h2>
+            </div>
+            <button class="secondary-inline" id="addCalendarEvent" type="button">＋ Añadir evento</button>
+          </div>
+          <div class="stack" id="selectedDayEvents"></div>
+        </article>
+
+        <div class="section-head">
+          <div><h2>Gestaciones activas</h2><p>Días restantes y progreso estimado</p></div>
+          <button class="text-button" data-action="pregnancy" type="button">Añadir cubrición</button>
+        </div>
+        <div class="stack" id="pregnancyList"></div>
+      </section>
+
+      <section class="view" id="hensView">
+        <div class="page-title">
+          <div><h1>Gallinas</h1><p>Grupos, anillas y producción de huevos.</p></div>
+          <button class="round-add" data-action="hen" type="button">+</button>
+        </div>
+
+        <article class="egg-counter">
+          <div>
+            <h2>Total de huevos de hoy</h2>
+            <p>Modifica la cifra y guarda el total diario.</p>
+            <button class="gold-button" id="saveQuickEggs" type="button">Guardar total del día</button>
+          </div>
+          <div class="stepper">
+            <button id="eggMinus" type="button">−</button>
+            <b id="quickEggValue">0</b>
+            <button id="eggPlus" type="button">+</button>
+          </div>
+        </article>
+
+        <div class="animal-grid" id="henGrid"></div>
+      </section>
+
+      <section class="view" id="feedView">
+        <div class="page-title">
+          <div><h1>Pienso</h1><p>Compras, consumo y coste.</p></div>
+          <button class="round-add" data-action="feed" type="button">+</button>
+        </div>
+        <div class="metrics feed-metrics">
+          <div class="metric"><b id="monthlyFeedKg">0</b><span>kg este mes</span></div>
+          <div class="metric"><b id="monthlyFeedCost">0 €</b><span>gasto mensual</span></div>
+          <div class="metric"><b id="averageFeedCost">0 €</b><span>precio medio/kg</span></div>
+        </div>
+        <div class="stack" id="feedList"></div>
+      </section>
+
+      <section class="view" id="historyView">
+        <div class="page-title">
+          <div><h1>Historial</h1><p>La historia del rebaño y los cambios recientes.</p></div>
+          <button class="round-add" data-action="history" type="button">+</button>
+        </div>
+
+        <div class="history-layout">
+          <article class="card">
+            <div class="section-head compact">
+              <div><h2>Historia del rebaño</h2><p>Ordenada por año</p></div>
+            </div>
+            <div class="timeline" id="historyTimeline"></div>
+          </article>
+
+          <div>
+            <article class="card">
+              <div class="section-head compact"><div><h2>Animales actuales</h2></div></div>
+              <div class="name-chips" id="currentAnimals"></div>
+            </article>
+            <article class="card spaced-card">
+              <div class="section-head compact"><div><h2>Animales que ya no están</h2></div></div>
+              <div class="name-chips" id="archivedAnimals"></div>
+            </article>
+            <article class="card spaced-card">
+              <div class="section-head compact"><div><h2>Actividad compartida</h2></div></div>
+              <div id="fullActivity"></div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <button class="floating-add" id="floatingAdd" type="button">+</button>
+
+  <nav class="bottom-nav" aria-label="Navegación principal">
+    <button class="active" data-view="homeView" type="button"><b>⌂</b>Hoy</button>
+    <button data-view="goatsView" type="button"><b>🐐</b>Cabras</button>
+    <button data-view="hensView" type="button"><b>🐔</b>Gallinas</button>
+    <button data-view="feedView" type="button"><b>🌾</b>Pienso</button>
+    <button data-view="historyView" type="button"><b>⌛</b>Historial</button>
+  </nav>
+
+  <div class="overlay hidden" id="overlay">
+    <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <header class="sheet-head">
+        <h2 id="sheetTitle"></h2>
+        <button class="close-button" id="closeSheet" type="button" aria-label="Cerrar">×</button>
+      </header>
+      <div class="sheet-body" id="sheetBody"></div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" aria-live="polite"></div>
+<script>
+(() => {
+  "use strict";
+
+  const FIREBASE_VERSION = "12.11.0";
+  const firebaseConfig = {
+    apiKey: "AIzaSyDtauQRMU2vWS8RI_9TiDr-mZewvkQpxR4",
+    authDomain: "la-granja-de-la-abuela.firebaseapp.com",
+    projectId: "la-granja-de-la-abuela",
+    storageBucket: "la-granja-de-la-abuela.firebasestorage.app",
+    messagingSenderId: "191036578892",
+    appId: "1:191036578892:web:cec8275b54cc52572e28e9"
+  };
+
+  let initializeApp, getAuth, onAuthStateChanged;
+  let createUserWithEmailAndPassword, signInWithEmailAndPassword;
+  let signOut, sendPasswordResetEmail;
+  let initializeFirestore, getFirestore;
+  let persistentLocalCache, persistentMultipleTabManager;
+  let doc, collection, setDoc, getDoc, getDocs, onSnapshot, serverTimestamp;
+
+  const APP_VERSION = 9;
+  const LOCAL_KEY = "laCuadraPwaStateV9";
+  const PENDING_KEY = "laCuadraPendingDocumentsV9";
+  const DOCUMENT_KEYS = [
+    "goats", "pregnancies", "hens", "eggs", "feed", "births",
+    "historyEvents", "archivedAnimals", "activity", "calendarEvents"
+  ];
+
+  const blankState = () => ({
+    version: APP_VERSION,
+    goats: [],
+    pregnancies: [],
+    hens: [],
+    eggs: [],
+    feed: [],
+    births: [],
+    historyEvents: [],
+    archivedAnimals: [],
+    activity: [],
+    calendarEvents: []
+  });
+
+  const $ = (id) => document.getElementById(id);
+  const config = firebaseConfig;
+  const cloudConfigured = Boolean(
+    config.apiKey &&
+    config.authDomain &&
+    config.projectId &&
+    !config.apiKey.includes("TU_") &&
+    !config.projectId.includes("TU_")
+  );
+
+  let state = loadLocalState();
+  let goatFilter = "Todas";
+  let quickEggs = 0;
+  let calendarCursor = firstDayOfMonth(new Date());
+  let selectedCalendarDate = todayISO();
+  let deferredInstallPrompt = null;
+  let firebaseApp = null;
+  let firebaseAuth = null;
+  let firestoreDb = null;
+  let firebaseReady = false;
+  let firebaseLoadError = "";
+  let currentSession = null;
+  let currentFarm = null;
+  let unsubscribeFarmDocuments = null;
+  let syncTimer = null;
+  let pendingDocuments = loadPendingDocuments();
+  let applyingRemote = false;
+
+  function todayISO() {
+    const date = new Date();
+    return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  }
+
+  function firstDayOfMonth(date) {
+    return new Date(date.getFullYear(), date.getMonth(), 1);
+  }
+
+  function parseLocalDate(value) {
+    if (!value) return null;
+    const [year, month, day] = value.split("-").map(Number);
+    return new Date(year, month - 1, day);
+  }
+
+  function dateNumber(value) {
+    if (!value) return Number.NaN;
+    const [year, month, day] = value.split("-").map(Number);
+    return Date.UTC(year, month - 1, day) / 86400000;
+  }
+
+  function toISO(date) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+  }
+
+  function addDays(value, number) {
+    const date = parseLocalDate(value);
+    date.setDate(date.getDate() + Number(number));
+    return toISO(date);
+  }
+
+  function daysBetween(from, to) {
+    return Math.round(dateNumber(to) - dateNumber(from));
+  }
+
+  function formatDate(value, options = {}) {
+    if (!value) return "Sin fecha";
+    return parseLocalDate(value).toLocaleDateString("es-ES", {
+      day: "2-digit",
+      month: options.longMonth ? "long" : "short",
+      year: "numeric"
+    });
+  }
+
+  function formatSelectedDate(value) {
+    return parseLocalDate(value).toLocaleDateString("es-ES", {
+      weekday: "long", day: "numeric", month: "long", year: "numeric"
+    });
+  }
+
+  function euro(value) {
+    return Number(value || 0).toLocaleString("es-ES", {
+      style: "currency", currency: "EUR"
+    });
+  }
+
+  function escapeHTML(value = "") {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function uid(prefix) {
+    return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  }
+
+  function displayBirth(animal) {
+    if (!animal.birth) return "Edad pendiente";
+    if (animal.birthPrecision === "month") {
+      return parseLocalDate(animal.birth).toLocaleDateString("es-ES", {
+        month: "long", year: "numeric"
+      });
+    }
+    if (["approx", "estimated"].includes(animal.birthPrecision)) {
+      return `Aprox. ${formatDate(animal.birth)}`;
+    }
+    return formatDate(animal.birth);
+  }
+
+  function ageText(birth, precision) {
+    if (!birth) return "Edad desconocida";
+    const now = parseLocalDate(todayISO());
+    const born = parseLocalDate(birth);
+    let months = (now.getFullYear() - born.getFullYear()) * 12 + (now.getMonth() - born.getMonth());
+    if (now.getDate() < born.getDate()) months -= 1;
+    months = Math.max(0, months);
+    const years = Math.floor(months / 12);
+    const remainder = months % 12;
+    const prefix = ["approx", "estimated", "month"].includes(precision) ? "Aprox. " : "";
+    if (years === 0) return `${prefix}${months} mes${months === 1 ? "" : "es"}`;
+    if (remainder === 0) return `${prefix}${years} año${years === 1 ? "" : "s"}`;
+    return `${prefix}${years} año${years === 1 ? "" : "s"} y ${remainder} mes${remainder === 1 ? "" : "es"}`;
+  }
+
+  function loadLocalState() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(LOCAL_KEY));
+      return saved ? normalizeState(saved) : blankState();
+    } catch {
+      return blankState();
+    }
+  }
+
+  function normalizeState(value) {
+    const normalized = blankState();
+    for (const key of DOCUMENT_KEYS) {
+      normalized[key] = Array.isArray(value?.[key]) ? value[key] : [];
+    }
+    normalized.version = APP_VERSION;
+    return normalized;
+  }
+
+  function persistLocal() {
+    state.version = APP_VERSION;
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(state));
+  }
+
+  function loadPendingDocuments() {
+    try {
+      const value = JSON.parse(localStorage.getItem(PENDING_KEY));
+      return new Set(Array.isArray(value) ? value : []);
+    } catch {
+      return new Set();
+    }
+  }
+
+  function persistPendingDocuments() {
+    localStorage.setItem(PENDING_KEY, JSON.stringify([...pendingDocuments]));
+  }
+
+  function markPending(keys) {
+    for (const key of keys) pendingDocuments.add(key);
+    persistPendingDocuments();
+  }
+
+  function toast(message) {
+    const element = $("toast");
+    element.textContent = message;
+    element.classList.add("show");
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => element.classList.remove("show"), 2200);
+  }
+
+  function openSheet(title, html) {
+    $("sheetTitle").textContent = title;
+    $("sheetBody").innerHTML = html;
+    $("overlay").classList.remove("hidden");
+  }
+
+  function closeSheet() {
+    $("overlay").classList.add("hidden");
+  }
+
+  function addActivity(icon, text) {
+    state.activity.unshift({
+      id: uid("activity"),
+      icon,
+      text,
+      date: new Date().toISOString(),
+      authorEmail: currentSession?.user?.email || ""
+    });
+    state.activity = state.activity.slice(0, 200);
+  }
+
+  function commit(keys, message = "") {
+    persistLocal();
+    renderAll();
+    if (!applyingRemote) {
+      markPending(keys);
+      scheduleRemoteSync();
+    }
+    if (message) toast(message);
+  }
+
+  function dueDate(pregnancy) {
+    if (pregnancy.mating) return addDays(pregnancy.mating, Number(pregnancy.days || 150));
+    return pregnancy.due || "";
+  }
+
+  function daysLeft(pregnancy) {
+    const due = dueDate(pregnancy);
+    return due ? daysBetween(todayISO(), due) : Number.NaN;
+  }
+
+  function activeHenCount() {
+    return state.hens
+      .filter((hen) => hen.status !== "Retirado")
+      .reduce((sum, hen) => sum + Number(hen.count || 0), 0);
+  }
+
+  function eggsToday() {
+    const entries = state.eggs.filter((entry) => entry.date === todayISO());
+    const dailyTotal = entries.find((entry) => entry.dailyTotal);
+    return dailyTotal
+      ? Number(dailyTotal.count || 0)
+      : entries.reduce((sum, entry) => sum + Number(entry.count || 0), 0);
+  }
+
+  function activityMarkup(entry) {
+    const date = new Date(entry.date);
+    const author = entry.authorEmail ? ` · ${escapeHTML(entry.authorEmail)}` : "";
+    return `<div class="activity-row">
+      <div class="activity-icon">${escapeHTML(entry.icon)}</div>
+      <div>
+        <strong>${escapeHTML(entry.text)}</strong>
+        <span>${date.toLocaleDateString("es-ES", { day: "2-digit", month: "short", year: "numeric" })}
+          · ${date.toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}${author}</span>
+      </div>
+    </div>`;
+  }
+
+  function countdownMarkup(pregnancy, compact = false) {
+    const goat = state.goats.find((item) => item.id === pregnancy.goatId);
+    const due = dueDate(pregnancy);
+    const left = daysLeft(pregnancy);
+    let label = "Sin fecha";
+    let cssClass = "";
+    let number = "—";
+
+    if (Number.isFinite(left)) {
+      number = Math.abs(left);
+      if (left < 0) {
+        label = "días de retraso";
+        cssClass = "late";
+      } else if (left === 0) {
+        label = "previsto hoy";
+        cssClass = "today";
+        number = "Hoy";
+      } else {
+        label = left === 1 ? "día" : "días";
+      }
+    }
+
+    if (compact) {
+      return `<div class="birth-row">
+        <div class="avatar">🐐</div>
+        <div>
+          <strong>${escapeHTML(goat?.name || "Cabra")}</strong>
+          <small>Parto estimado · ${formatDate(due)}</small>
+        </div>
+        <div class="days-left ${cssClass}"><b>${number}</b>${label}</div>
+      </div>`;
+    }
+
+    const total = Number(pregnancy.days || 150);
+    const elapsed = Math.max(0, total - Math.max(0, left));
+    const progress = Math.max(0, Math.min(100, (elapsed / total) * 100));
+
+    return `<div class="pregnancy-card">
+      <div class="pregnancy-top">
+        <div>
+          <strong>🐐 ${escapeHTML(goat?.name || "Cabra")}</strong>
+          <small>Cubrición: ${formatDate(pregnancy.mating)} · Parto: ${formatDate(due)}
+            ${pregnancy.male ? ` · Macho: ${escapeHTML(pregnancy.male)}` : ""}</small>
+        </div>
+        <div class="days-left ${cssClass}"><b>${number}</b>${label}</div>
+      </div>
+      <div class="progress"><div style="width:${progress}%"></div></div>
+      <div class="row-actions">
+        <button type="button" data-edit-pregnancy="${pregnancy.id}">Editar</button>
+        <button type="button" data-register-birth="${pregnancy.goatId}">Registrar parto</button>
+        <button type="button" class="danger" data-delete-pregnancy="${pregnancy.id}">Cancelar gestación</button>
+      </div>
+    </div>`;
+  }
+
+  function renderAll() {
+    renderSyncStatus();
+    renderHome();
+    renderGoats();
+    renderCalendar();
+    renderHens();
+    renderFeed();
+    renderHistory();
+    quickEggs = eggsToday();
+    $("quickEggValue").textContent = quickEggs;
+    $("offlineBanner").classList.toggle("hidden", navigator.onLine);
+  }
+
+  function renderHome() {
+    $("metricGoats").textContent = state.goats.filter((goat) => goat.status !== "Baja").length;
+    $("metricHens").textContent = activeHenCount();
+    $("metricEggs").textContent = eggsToday();
+
+    const pregnancies = state.pregnancies
+      .filter((pregnancy) => pregnancy.status === "Activa")
+      .sort((a, b) => dueDate(a).localeCompare(dueDate(b)));
+
+    $("homePregnancies").innerHTML = pregnancies.length
+      ? pregnancies.slice(0, 4).map((pregnancy) => countdownMarkup(pregnancy, true)).join("")
+      : `<div class="empty">No hay gestaciones activas.</div>`;
+
+    $("homeActivity").innerHTML = state.activity.length
+      ? state.activity.slice(0, 7).map(activityMarkup).join("")
+      : `<div class="empty">Todavía no hay movimientos.</div>`;
+  }
+
+  function renderGoats() {
+    let goats = [...state.goats];
+    if (goatFilter !== "Todas") goats = goats.filter((goat) => goat.status === goatFilter);
+
+    $("goatGrid").innerHTML = goats.length
+      ? goats.map((goat) => {
+          const mother = state.goats.find((item) => item.id === goat.motherId);
+          const pregnancy = state.pregnancies.find(
+            (item) => item.goatId === goat.id && item.status === "Activa"
+          );
+          return `<article class="animal-card">
+            <div class="animal-head">
+              <div>
+                <h3>${goat.sex === "Macho" ? "🐏" : "🐐"} ${escapeHTML(goat.name)}</h3>
+                <div class="subtext">${escapeHTML(goat.sex || "Hembra")} · ${ageText(goat.birth, goat.birthPrecision)}</div>
+              </div>
+              <button class="more-button" type="button" data-edit-goat="${goat.id}">•••</button>
+            </div>
+            <div class="tags">
+              <span class="tag ${goat.status === "Gestante" ? "gold" : goat.status === "Baja" ? "gray" : ""}">${escapeHTML(goat.status)}</span>
+              <span class="tag gray">${escapeHTML(displayBirth(goat))}</span>
+              ${mother ? `<span class="tag blue">Hija de ${escapeHTML(mother.name)}</span>` : ""}
+            </div>
+            ${pregnancy ? `<div class="days-left ${daysLeft(pregnancy) < 0 ? "late" : daysLeft(pregnancy) === 0 ? "today" : ""}" style="width:100%;margin-bottom:12px">
+              <b>${daysLeft(pregnancy) === 0 ? "Hoy" : Math.abs(daysLeft(pregnancy))}</b>
+              ${daysLeft(pregnancy) < 0 ? "días de retraso" : daysLeft(pregnancy) === 0 ? "parto previsto" : daysLeft(pregnancy) === 1 ? "día para el parto" : "días para el parto"}
+            </div>` : ""}
+            <div class="animal-foot">
+              <span class="subtext">${escapeHTML(goat.notes || "Sin notas")}</span>
+              ${goat.sex === "Hembra" && goat.status !== "Baja"
+                ? `<button class="text-button" type="button" data-new-pregnancy="${goat.id}">Cubrición</button>`
+                : ""}
+            </div>
+          </article>`;
+        }).join("")
+      : `<div class="empty" style="grid-column:1/-1">No hay animales en este apartado.</div>`;
+
+    const active = state.pregnancies
+      .filter((pregnancy) => pregnancy.status === "Activa")
+      .sort((a, b) => dueDate(a).localeCompare(dueDate(b)));
+
+    $("pregnancyList").innerHTML = active.length
+      ? active.map((pregnancy) => countdownMarkup(pregnancy)).join("")
+      : `<div class="empty">No hay gestaciones activas.</div>`;
+  }
+
+  function getEventsForDate(date) {
+    const events = [];
+
+    for (const pregnancy of state.pregnancies) {
+      const goat = state.goats.find((item) => item.id === pregnancy.goatId);
+      if (pregnancy.mating === date) {
+        events.push({
+          icon: "❤️",
+          title: `Cubrición de ${goat?.name || "una cabra"}`,
+          detail: pregnancy.male ? `Macho: ${pregnancy.male}` : "Cubrición registrada",
+          type: "pregnancy"
+        });
+      }
+      if (pregnancy.status === "Activa" && dueDate(pregnancy) === date) {
+        events.push({
+          icon: "🐐",
+          title: `Parto estimado de ${goat?.name || "una cabra"}`,
+          detail: `${pregnancy.days || 150} días de gestación estimados`,
+          type: "due"
+        });
+      }
+    }
+
+    for (const birth of state.births.filter((item) => item.date === date)) {
+      const mother = state.goats.find((item) => item.id === birth.motherId);
+      events.push({
+        icon: "🍼",
+        title: `Parto de ${mother?.name || "una cabra"}`,
+        detail: `${birth.count} cría${Number(birth.count) === 1 ? "" : "s"} · ${birth.alive} viva${Number(birth.alive) === 1 ? "" : "s"}`,
+        type: "birth"
+      });
+    }
+
+    for (const entry of state.eggs.filter((item) => item.date === date)) {
+      const group = state.hens.find((item) => item.id === entry.groupId);
+      events.push({
+        icon: "🥚",
+        title: `${entry.count} huevos`,
+        detail: entry.dailyTotal ? "Total diario" : group?.name || "Recogida de huevos",
+        type: "egg"
+      });
+    }
+
+    for (const entry of state.feed.filter((item) => item.date === date)) {
+      events.push({
+        icon: "🌾",
+        title: `${entry.type}: ${entry.product}`,
+        detail: `${entry.animal} · ${entry.kg} kg · ${euro(entry.cost)}`,
+        type: "feed"
+      });
+    }
+
+    for (const goat of state.goats.filter((item) => item.birth === date)) {
+      events.push({
+        icon: goat.sex === "Macho" ? "🐏" : "🐐",
+        title: `Nacimiento de ${goat.name}`,
+        detail: goat.birthPrecision === "exact" ? "Fecha exacta" : "Fecha aproximada",
+        type: "animal-birth"
+      });
+    }
+
+    for (const hen of state.hens.filter((item) => item.arrival === date)) {
+      events.push({
+        icon: "🐔",
+        title: `Llegada de ${hen.name}`,
+        detail: `${hen.count} animales`,
+        type: "hen-arrival"
+      });
+    }
+
+    for (const event of state.calendarEvents.filter((item) => item.date === date)) {
+      events.push({
+        icon: eventIcon(event.type),
+        title: event.title,
+        detail: event.notes || event.type,
+        type: "custom",
+        customId: event.id
+      });
+    }
+
+    return events;
+  }
+
+  function eventIcon(type) {
+    return {
+      "Recordatorio": "🔔",
+      "Veterinario": "🩺",
+      "Vacuna": "💉",
+      "Medicación": "💊",
+      "Compra": "🛒",
+      "Otro": "📌"
+    }[type] || "📌";
+  }
+
+  function renderCalendar() {
+    const year = calendarCursor.getFullYear();
+    const month = calendarCursor.getMonth();
+    $("calendarTitle").textContent = calendarCursor.toLocaleDateString("es-ES", {
+      month: "long", year: "numeric"
+    });
+
+    const weekdays = ["L", "M", "X", "J", "V", "S", "D"];
+    let html = weekdays.map((day) => `<div class="weekday">${day}</div>`).join("");
+
+    const first = new Date(year, month, 1);
+    const offset = (first.getDay() + 6) % 7;
+    const start = new Date(year, month, 1 - offset);
+
+    for (let index = 0; index < 42; index += 1) {
+      const day = new Date(start);
+      day.setDate(start.getDate() + index);
+      const iso = toISO(day);
+      const events = getEventsForDate(iso);
+      const classes = ["calendar-day"];
+      if (day.getMonth() !== month) classes.push("outside");
+      if (iso === todayISO()) classes.push("today");
+      if (iso === selectedCalendarDate) classes.push("selected");
+
+      html += `<button class="${classes.join(" ")}" type="button" data-calendar-date="${iso}">
+        <span class="calendar-number">${day.getDate()}${events.length ? `<span class="event-count">${events.length}</span>` : ""}</span>
+        ${events.slice(0, 2).map((event) => `<span class="calendar-event-preview">${escapeHTML(event.icon)} ${escapeHTML(event.title)}</span>`).join("")}
+      </button>`;
+    }
+
+    $("calendarGrid").innerHTML = html;
+    renderSelectedDay();
+  }
+
+  function renderSelectedDay() {
+    $("selectedDayTitle").textContent = formatSelectedDate(selectedCalendarDate);
+    const events = getEventsForDate(selectedCalendarDate);
+    $("selectedDayEvents").innerHTML = events.length
+      ? events.map((event) => `<div class="day-event">
+          <div class="day-event-icon">${escapeHTML(event.icon)}</div>
+          <div><strong>${escapeHTML(event.title)}</strong><small>${escapeHTML(event.detail || "")}</small></div>
+          ${event.customId ? `<button class="delete-icon" type="button" data-delete-calendar-event="${event.customId}" aria-label="Eliminar evento">×</button>` : ""}
+        </div>`).join("")
+      : `<div class="empty">No hay eventos registrados para este día.</div>`;
+  }
+
+  function ringColor(ring) {
+    return {
+      Roja: "#d65353", Azul: "#4a7fc6", Verde: "#4f9562", Amarilla: "#d8b840",
+      Blanca: "#cccccc", Negra: "#303030", Naranja: "#dd8736", Morada: "#865ab3",
+      "Sin anilla": "#999999"
+    }[ring] || "#999999";
+  }
+
+  function renderHens() {
+    $("henGrid").innerHTML = state.hens.length
+      ? state.hens.map((hen) => `<article class="animal-card">
+          <div class="animal-head">
+            <div><h3>🐔 ${escapeHTML(hen.name)}</h3><div class="subtext">${Number(hen.count)} animales · ${escapeHTML(hen.type)}</div></div>
+            <button class="more-button" type="button" data-edit-hen="${hen.id}">•••</button>
+          </div>
+          <div class="tags">
+            <span class="tag" style="color:${ringColor(hen.ring)}"><i class="ring"></i>${escapeHTML(hen.ring)}</span>
+            <span class="tag gray">${escapeHTML(hen.status)}</span>
+            <span class="tag blue">${ageText(hen.birth, hen.birthPrecision)}</span>
+          </div>
+          <div class="subtext">${escapeHTML(hen.notes || "")}</div>
+          <div class="animal-foot" style="margin-top:12px">
+            <span class="subtext">Llegada: ${formatDate(hen.arrival)}</span>
+            <button class="text-button" type="button" data-new-eggs="${hen.id}">Huevos</button>
+          </div>
+        </article>`).join("")
+      : `<div class="empty" style="grid-column:1/-1">No hay grupos de gallinas.</div>`;
+  }
+
+  function renderFeed() {
+    const now = new Date();
+    const monthEntries = state.feed.filter((item) => {
+      const date = parseLocalDate(item.date);
+      return date && date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+    });
+    const purchases = monthEntries.filter((item) => item.type === "Compra");
+    const kg = monthEntries.reduce((sum, item) => sum + Number(item.kg || 0), 0);
+    const cost = purchases.reduce((sum, item) => sum + Number(item.cost || 0), 0);
+    const purchaseKg = purchases.reduce((sum, item) => sum + Number(item.kg || 0), 0);
+
+    $("monthlyFeedKg").textContent = kg.toLocaleString("es-ES", { maximumFractionDigits: 2 });
+    $("monthlyFeedCost").textContent = euro(cost);
+    $("averageFeedCost").textContent = euro(purchaseKg ? cost / purchaseKg : 0);
+
+    $("feedList").innerHTML = state.feed.length
+      ? [...state.feed].sort((a, b) => b.date.localeCompare(a.date)).map((item) => `<div class="feed-row">
+          <div class="feed-icon">${item.animal === "Cabras" ? "🐐" : item.animal === "Gallinas" ? "🐔" : "🌾"}</div>
+          <div>
+            <strong>${escapeHTML(item.product)}</strong>
+            <small>${formatDate(item.date)} · ${escapeHTML(item.animal)} · ${Number(item.kg).toLocaleString("es-ES", { maximumFractionDigits: 2 })} kg · ${escapeHTML(item.type)}</small>
+          </div>
+          <div class="money">${euro(item.cost)}</div>
+        </div>`).join("")
+      : `<div class="empty">No hay movimientos de pienso.</div>`;
+  }
+
+  function renderHistory() {
+    $("historyTimeline").innerHTML = state.historyEvents.length
+      ? [...state.historyEvents].sort((a, b) => Number(a.year) - Number(b.year)).map((event) => `<div class="timeline-item">
+          <h3>${escapeHTML(event.title || event.year)}</h3>
+          <p>${escapeHTML(event.text)}</p>
+        </div>`).join("")
+      : `<div class="empty">No hay hechos históricos.</div>`;
+
+    $("currentAnimals").innerHTML = state.goats
+      .filter((goat) => goat.status !== "Baja")
+      .map((goat) => `<span class="name-chip">${goat.sex === "Macho" ? "♂" : "♀"} ${escapeHTML(goat.name)}</span>`)
+      .join("") || `<span class="subtext">Sin animales.</span>`;
+
+    $("archivedAnimals").innerHTML = state.archivedAnimals
+      .map((animal) => `<span class="name-chip archived" title="${escapeHTML(animal.note || "")}">${escapeHTML(animal.name)}</span>`)
+      .join("") || `<span class="subtext">Sin animales archivados.</span>`;
+
+    $("fullActivity").innerHTML = state.activity.length
+      ? state.activity.map(activityMarkup).join("")
+      : `<div class="empty">Todavía no hay actividad.</div>`;
+  }
+
+  function renderSyncStatus() {
+    const element = $("syncStatus");
+    element.className = "status-pill";
+
+    if (!cloudConfigured) {
+      element.classList.add("local");
+      element.textContent = "● Solo local";
+      $("accountButton").textContent = "⚙ Configurar";
+      return;
+    }
+
+    if (!firebaseReady) {
+      element.classList.add(firebaseLoadError ? "offline" : "syncing");
+      element.textContent = firebaseLoadError ? "● Error Firebase" : "● Cargando…";
+      $("accountButton").textContent = firebaseLoadError ? "⚠ Revisar" : "👤 Conectar";
+      return;
+    }
+
+    if (!navigator.onLine) {
+      element.classList.add("offline");
+      element.textContent = "● Sin conexión";
+    } else if (pendingDocuments.size) {
+      element.classList.add("syncing");
+      element.textContent = "● Pendiente";
+    } else if (currentFarm) {
+      element.classList.add("online");
+      element.textContent = "● Sincronizado";
+    } else {
+      element.classList.add("local");
+      element.textContent = "● Sin conectar";
+    }
+
+    $("accountButton").textContent = currentSession
+      ? `👤 ${currentSession.user.email.split("@")[0]}`
+      : "👤 Conectar";
+  }
+
+  function openActionMenu() {
+    openSheet("¿Qué quieres anotar?", `<div class="action-menu">
+      <button class="action-option" type="button" data-sheet-action="goat"><b>🐐</b><strong>Nuevo animal</strong><span>Cabra o macho</span></button>
+      <button class="action-option" type="button" data-sheet-action="hen"><b>🐔</b><strong>Grupo de gallinas</strong><span>Cantidad y anilla</span></button>
+      <button class="action-option" type="button" data-sheet-action="egg"><b>🥚</b><strong>Huevos</strong><span>Recogida diaria</span></button>
+      <button class="action-option" type="button" data-sheet-action="pregnancy"><b>📅</b><strong>Cubrición</strong><span>Calendario de parto</span></button>
+      <button class="action-option" type="button" data-sheet-action="birth"><b>🍼</b><strong>Parto</strong><span>Registrar crías</span></button>
+      <button class="action-option" type="button" data-sheet-action="feed"><b>🌾</b><strong>Pienso</strong><span>Kilos y coste</span></button>
+      <button class="action-option" type="button" data-sheet-action="calendar"><b>🔔</b><strong>Evento</strong><span>Vacuna o recordatorio</span></button>
+      <button class="action-option" type="button" data-sheet-action="history"><b>⌛</b><strong>Historial</strong><span>Añadir un hecho</span></button>
+    </div>`);
+  }
+
+  function femaleOptions(selected = "") {
+    return state.goats
+      .filter((goat) => goat.sex === "Hembra" && goat.status !== "Baja")
+      .map((goat) => `<option value="${goat.id}" ${goat.id === selected ? "selected" : ""}>${escapeHTML(goat.name)}</option>`)
+      .join("");
+  }
+
+  function motherOptions(selected = "", editingId = "") {
+    return `<option value="">Sin indicar</option>` + state.goats
+      .filter((goat) => goat.sex === "Hembra" && goat.id !== editingId)
+      .map((goat) => `<option value="${goat.id}" ${goat.id === selected ? "selected" : ""}>${escapeHTML(goat.name)}</option>`)
+      .join("");
+  }
+
+  function henOptions(selected = "") {
+    return state.hens
+      .filter((hen) => hen.status !== "Retirado")
+      .map((hen) => `<option value="${hen.id}" ${hen.id === selected ? "selected" : ""}>${escapeHTML(hen.name)}</option>`)
+      .join("");
+  }
+
+  function openGoatForm(id = "") {
+    const goat = state.goats.find((item) => item.id === id) || {};
+    openSheet(id ? "Editar animal" : "Nuevo animal", `<form id="goatForm">
+      <div class="form-grid">
+        <div class="field"><label for="goatName">Nombre</label><input id="goatName" required value="${escapeHTML(goat.name || "")}"></div>
+        <div class="field"><label for="goatSex">Sexo</label><select id="goatSex"><option ${goat.sex === "Hembra" ? "selected" : ""}>Hembra</option><option ${goat.sex === "Macho" ? "selected" : ""}>Macho</option></select></div>
+        <div class="field"><label for="goatBirth">Fecha de nacimiento</label><input id="goatBirth" type="date" value="${goat.birth || ""}"></div>
+        <div class="field"><label for="goatPrecision">Exactitud</label><select id="goatPrecision">
+          <option value="exact" ${goat.birthPrecision === "exact" ? "selected" : ""}>Exacta</option>
+          <option value="approx" ${goat.birthPrecision === "approx" ? "selected" : ""}>Aproximada</option>
+          <option value="month" ${goat.birthPrecision === "month" ? "selected" : ""}>Solo el mes</option>
+          <option value="unknown" ${goat.birthPrecision === "unknown" ? "selected" : ""}>Desconocida</option>
+        </select></div>
+        <div class="field"><label for="goatStatus">Estado</label><select id="goatStatus">${["Activo", "Gestante", "Lactación", "Baja"].map((value) => `<option ${goat.status === value ? "selected" : ""}>${value}</option>`).join("")}</select></div>
+        <div class="field"><label for="goatMother">Madre</label><select id="goatMother">${motherOptions(goat.motherId || "", id)}</select></div>
+        <div class="field full"><label for="goatNotes">Notas</label><textarea id="goatNotes">${escapeHTML(goat.notes || "")}</textarea></div>
+      </div>
+      <button class="primary-button" type="submit">Guardar animal</button>
+      ${id ? `<button class="secondary-button danger-text" id="deleteGoatButton" type="button">Eliminar animal</button>` : ""}
+    </form>`);
+
+    $("goatForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const item = {
+        id: id || uid("goat"),
+        name: $("goatName").value.trim(),
+        sex: $("goatSex").value,
+        birth: $("goatBirth").value,
+        birthPrecision: $("goatPrecision").value,
+        motherId: $("goatMother").value,
+        status: $("goatStatus").value,
+        notes: $("goatNotes").value.trim()
+      };
+      state.goats = id
+        ? state.goats.map((existing) => existing.id === id ? item : existing)
+        : [...state.goats, item];
+      addActivity(item.sex === "Macho" ? "🐏" : "🐐", `${id ? "Ficha actualizada" : "Nuevo animal"}: ${item.name}`);
+      closeSheet();
+      commit(["goats", "activity"], "Animal guardado");
+    });
+
+    if (id) {
+      $("deleteGoatButton").addEventListener("click", () => {
+        if (!confirm(`¿Eliminar a ${goat.name}?`)) return;
+        state.goats = state.goats.filter((item) => item.id !== id);
+        state.pregnancies = state.pregnancies.filter((item) => item.goatId !== id);
+        state.goats.forEach((item) => { if (item.motherId === id) item.motherId = ""; });
+        addActivity("🗑️", `Animal eliminado: ${goat.name}`);
+        closeSheet();
+        commit(["goats", "pregnancies", "activity"], "Animal eliminado");
+      });
+    }
+  }
+
+  function openHenForm(id = "") {
+    const hen = state.hens.find((item) => item.id === id) || {};
+    openSheet(id ? "Editar grupo" : "Nuevo grupo de gallinas", `<form id="henForm">
+      <div class="form-grid">
+        <div class="field full"><label for="henName">Nombre del grupo</label><input id="henName" required value="${escapeHTML(hen.name || "")}"></div>
+        <div class="field"><label for="henType">Tipo</label><select id="henType">${["Sin especificar", "Ponedoras", "Americanas", "Pollitas", "Gallos", "Otro"].map((value) => `<option ${hen.type === value ? "selected" : ""}>${value}</option>`).join("")}</select></div>
+        <div class="field"><label for="henRing">Color de anilla</label><select id="henRing">${["Sin anilla", "Roja", "Azul", "Verde", "Amarilla", "Blanca", "Negra", "Naranja", "Morada"].map((value) => `<option ${hen.ring === value ? "selected" : ""}>${value}</option>`).join("")}</select></div>
+        <div class="field"><label for="henCount">Número de animales</label><input id="henCount" type="number" min="0" value="${hen.count ?? 1}" required></div>
+        <div class="field"><label for="henArrival">Fecha de llegada</label><input id="henArrival" type="date" value="${hen.arrival || ""}"></div>
+        <div class="field"><label for="henBirth">Nacimiento estimado</label><input id="henBirth" type="date" value="${hen.birth || ""}"></div>
+        <div class="field"><label for="henStatus">Estado</label><select id="henStatus">${["Activo", "Crecimiento", "Retirado"].map((value) => `<option ${hen.status === value ? "selected" : ""}>${value}</option>`).join("")}</select></div>
+        <div class="field full"><label for="henNotes">Notas</label><textarea id="henNotes">${escapeHTML(hen.notes || "")}</textarea></div>
+      </div>
+      <button class="primary-button" type="submit">Guardar grupo</button>
+      ${id ? `<button class="secondary-button danger-text" id="deleteHenButton" type="button">Eliminar grupo</button>` : ""}
+    </form>`);
+
+    $("henForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const item = {
+        id: id || uid("hen"),
+        name: $("henName").value.trim(),
+        type: $("henType").value,
+        ring: $("henRing").value,
+        count: Number($("henCount").value),
+        arrival: $("henArrival").value,
+        birth: $("henBirth").value,
+        birthPrecision: "estimated",
+        status: $("henStatus").value,
+        notes: $("henNotes").value.trim()
+      };
+      state.hens = id
+        ? state.hens.map((existing) => existing.id === id ? item : existing)
+        : [...state.hens, item];
+      addActivity("🐔", `${id ? "Grupo actualizado" : "Nuevo grupo"}: ${item.name}`);
+      closeSheet();
+      commit(["hens", "activity"], "Grupo guardado");
+    });
+
+    if (id) {
+      $("deleteHenButton").addEventListener("click", () => {
+        if (!confirm(`¿Eliminar ${hen.name}?`)) return;
+        state.hens = state.hens.filter((item) => item.id !== id);
+        state.eggs = state.eggs.filter((item) => item.groupId !== id);
+        addActivity("🗑️", `Grupo eliminado: ${hen.name}`);
+        closeSheet();
+        commit(["hens", "eggs", "activity"], "Grupo eliminado");
+      });
+    }
+  }
+
+  function openPregnancyForm(id = "", selectedGoat = "") {
+    if (!state.goats.some((goat) => goat.sex === "Hembra" && goat.status !== "Baja")) {
+      toast("No hay ninguna hembra disponible");
+      return;
+    }
+    const pregnancy = state.pregnancies.find((item) => item.id === id) || {};
+    const selected = selectedGoat || pregnancy.goatId || "";
+    openSheet(id ? "Editar gestación" : "Registrar cubrición", `<form id="pregnancyForm">
+      <div class="form-grid">
+        <div class="field full"><label for="pregnancyGoat">Cabra</label><select id="pregnancyGoat">${femaleOptions(selected)}</select></div>
+        <div class="field"><label for="matingDate">Fecha de cubrición</label><input id="matingDate" type="date" required value="${pregnancy.mating || todayISO()}"></div>
+        <div class="field"><label for="gestationDays">Días de gestación</label><input id="gestationDays" type="number" min="140" max="160" value="${pregnancy.days || 150}"></div>
+        <div class="field full"><label for="pregnancyMale">Macho</label><input id="pregnancyMale" value="${escapeHTML(pregnancy.male || "")}"></div>
+        <div class="field full"><label for="pregnancyNotes">Notas</label><textarea id="pregnancyNotes">${escapeHTML(pregnancy.notes || "")}</textarea></div>
+      </div>
+      <button class="primary-button" type="submit">Calcular y guardar parto</button>
+    </form>`);
+
+    $("pregnancyForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const item = {
+        id: id || uid("pregnancy"),
+        goatId: $("pregnancyGoat").value,
+        mating: $("matingDate").value,
+        days: Number($("gestationDays").value || 150),
+        male: $("pregnancyMale").value.trim(),
+        notes: $("pregnancyNotes").value.trim(),
+        status: "Activa"
+      };
+      state.pregnancies = id
+        ? state.pregnancies.map((existing) => existing.id === id ? item : existing)
+        : [...state.pregnancies, item];
+      const goat = state.goats.find((candidate) => candidate.id === item.goatId);
+      if (goat) goat.status = "Gestante";
+      const due = parseLocalDate(dueDate(item));
+      calendarCursor = firstDayOfMonth(due);
+      selectedCalendarDate = dueDate(item);
+      addActivity("📅", `${id ? "Gestación actualizada" : "Cubrición registrada"} para ${goat?.name || "una cabra"}; parto estimado ${formatDate(dueDate(item))}`);
+      closeSheet();
+      commit(["pregnancies", "goats", "activity"], "Calendario actualizado");
+    });
+  }
+
+  function deletePregnancy(id) {
+    const pregnancy = state.pregnancies.find((item) => item.id === id);
+    if (!pregnancy || !confirm("¿Cancelar esta gestación?")) return;
+    state.pregnancies = state.pregnancies.filter((item) => item.id !== id);
+    const goat = state.goats.find((item) => item.id === pregnancy.goatId);
+    if (goat && goat.status === "Gestante") goat.status = "Activo";
+    addActivity("📅", `Gestación cancelada de ${goat?.name || "una cabra"}`);
+    commit(["pregnancies", "goats", "activity"], "Gestación cancelada");
+  }
+
+  function openBirthForm(selectedGoat = "") {
+    if (!state.goats.some((goat) => goat.sex === "Hembra" && goat.status !== "Baja")) {
+      toast("No hay ninguna hembra disponible");
+      return;
+    }
+    openSheet("Registrar parto", `<form id="birthForm">
+      <div class="form-grid">
+        <div class="field full"><label for="birthMother">Madre</label><select id="birthMother">${femaleOptions(selectedGoat)}</select></div>
+        <div class="field"><label for="birthDate">Fecha del parto</label><input id="birthDate" type="date" value="${todayISO()}" required></div>
+        <div class="field"><label for="birthCount">Número de crías</label><input id="birthCount" type="number" min="1" value="1" required></div>
+        <div class="field"><label for="birthAlive">Crías vivas</label><input id="birthAlive" type="number" min="0" value="1" required></div>
+        <div class="field full"><label for="birthNotes">Notas</label><textarea id="birthNotes" placeholder="Sexo, nombres, incidencias..."></textarea></div>
+      </div>
+      <button class="primary-button" type="submit">Guardar parto</button>
+    </form>`);
+
+    $("birthForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const motherId = $("birthMother").value;
+      const mother = state.goats.find((goat) => goat.id === motherId);
+      const birthDate = $("birthDate").value;
+      const count = Number($("birthCount").value);
+      const alive = Number($("birthAlive").value);
+      const notes = $("birthNotes").value.trim();
+
+      state.births.push({ id: uid("birth"), motherId, date: birthDate, count, alive, notes });
+      state.pregnancies.forEach((pregnancy) => {
+        if (pregnancy.goatId === motherId && pregnancy.status === "Activa") pregnancy.status = "Completada";
+      });
+      if (mother) mother.status = "Lactación";
+
+      const year = parseLocalDate(birthDate).getFullYear();
+      state.historyEvents.push({
+        id: uid("history"),
+        year,
+        title: String(year),
+        text: `${formatDate(birthDate)}: ${mother?.name || "Una cabra"} pare ${count} cría${count === 1 ? "" : "s"}${notes ? `. ${notes}` : "."}`
+      });
+      addActivity("🍼", `${mother?.name || "Una cabra"} parió ${count} cría${count === 1 ? "" : "s"}`);
+      selectedCalendarDate = birthDate;
+      calendarCursor = firstDayOfMonth(parseLocalDate(birthDate));
+      closeSheet();
+      commit(["births", "pregnancies", "goats", "historyEvents", "activity"], "Parto guardado");
+    });
+  }
+
+  function openEggForm(selectedGroup = "") {
+    if (!state.hens.length) {
+      toast("Primero añade un grupo de gallinas");
+      return;
+    }
+    openSheet("Anotar huevos", `<form id="eggForm">
+      <div class="form-grid">
+        <div class="field"><label for="eggDate">Fecha</label><input id="eggDate" type="date" value="${todayISO()}" required></div>
+        <div class="field"><label for="eggCount">Cantidad</label><input id="eggCount" type="number" min="0" value="0" required></div>
+        <div class="field full"><label for="eggGroup">Grupo</label><select id="eggGroup">${henOptions(selectedGroup)}</select></div>
+        <div class="field full"><label for="eggNotes">Notas</label><textarea id="eggNotes"></textarea></div>
+      </div>
+      <button class="primary-button" type="submit">Guardar recogida</button>
+    </form>`);
+
+    $("eggForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const date = $("eggDate").value;
+      state.eggs = state.eggs.filter((entry) => !(entry.date === date && entry.dailyTotal));
+      const group = state.hens.find((hen) => hen.id === $("eggGroup").value);
+      state.eggs.push({
+        id: uid("egg"),
+        date,
+        count: Number($("eggCount").value),
+        groupId: $("eggGroup").value,
+        notes: $("eggNotes").value.trim(),
+        dailyTotal: false
+      });
+      addActivity("🥚", `${$("eggCount").value} huevos de ${group?.name || "un grupo"}`);
+      closeSheet();
+      commit(["eggs", "activity"], "Huevos guardados");
+    });
+  }
+
+  function openFeedForm() {
+    openSheet("Apuntar pienso", `<form id="feedForm">
+      <div class="form-grid">
+        <div class="field"><label for="feedDate">Fecha</label><input id="feedDate" type="date" value="${todayISO()}" required></div>
+        <div class="field"><label for="feedAnimal">Destino</label><select id="feedAnimal"><option>Cabras</option><option>Gallinas</option><option>Ambos</option></select></div>
+        <div class="field full"><label for="feedProduct">Producto</label><input id="feedProduct" required></div>
+        <div class="field"><label for="feedType">Movimiento</label><select id="feedType"><option>Compra</option><option>Consumo</option></select></div>
+        <div class="field"><label for="feedKg">Kilos</label><input id="feedKg" type="number" min="0" step=".01" required></div>
+        <div class="field full"><label for="feedCostInput">Coste total (€)</label><input id="feedCostInput" type="number" min="0" step=".01" value="0"></div>
+      </div>
+      <button class="primary-button" type="submit">Guardar movimiento</button>
+    </form>`);
+
+    $("feedForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      state.feed.push({
+        id: uid("feed"),
+        date: $("feedDate").value,
+        animal: $("feedAnimal").value,
+        product: $("feedProduct").value.trim(),
+        type: $("feedType").value,
+        kg: Number($("feedKg").value),
+        cost: Number($("feedCostInput").value || 0)
+      });
+      addActivity("🌾", `${$("feedType").value} de ${$("feedKg").value} kg de ${$("feedProduct").value.trim()}`);
+      closeSheet();
+      commit(["feed", "activity"], "Pienso guardado");
+    });
+  }
+
+  function openHistoryForm() {
+    openSheet("Añadir hecho histórico", `<form id="historyForm">
+      <div class="form-grid">
+        <div class="field"><label for="historyYear">Año</label><input id="historyYear" type="number" min="1900" max="2200" value="${new Date().getFullYear()}" required></div>
+        <div class="field"><label for="historyTitle">Título</label><input id="historyTitle" placeholder="Ej. 2026"></div>
+        <div class="field full"><label for="historyText">Descripción</label><textarea id="historyText" required></textarea></div>
+      </div>
+      <button class="primary-button" type="submit">Añadir al historial</button>
+    </form>`);
+
+    $("historyForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const year = Number($("historyYear").value);
+      state.historyEvents.push({
+        id: uid("history"),
+        year,
+        title: $("historyTitle").value.trim() || String(year),
+        text: $("historyText").value.trim()
+      });
+      addActivity("⌛", "Nuevo hecho añadido al historial");
+      closeSheet();
+      commit(["historyEvents", "activity"], "Historial actualizado");
+    });
+  }
+
+  function openCalendarEventForm(date = selectedCalendarDate) {
+    openSheet("Añadir evento al calendario", `<form id="calendarEventForm">
+      <div class="form-grid">
+        <div class="field"><label for="calendarEventDate">Fecha</label><input id="calendarEventDate" type="date" value="${date}" required></div>
+        <div class="field"><label for="calendarEventType">Tipo</label><select id="calendarEventType"><option>Recordatorio</option><option>Veterinario</option><option>Vacuna</option><option>Medicación</option><option>Compra</option><option>Otro</option></select></div>
+        <div class="field full"><label for="calendarEventTitle">Título</label><input id="calendarEventTitle" required placeholder="Ej. Vacunar a Sopa"></div>
+        <div class="field full"><label for="calendarEventNotes">Notas</label><textarea id="calendarEventNotes"></textarea></div>
+      </div>
+      <button class="primary-button" type="submit">Guardar evento</button>
+    </form>`);
+
+    $("calendarEventForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const item = {
+        id: uid("calendar"),
+        date: $("calendarEventDate").value,
+        type: $("calendarEventType").value,
+        title: $("calendarEventTitle").value.trim(),
+        notes: $("calendarEventNotes").value.trim()
+      };
+      state.calendarEvents.push(item);
+      selectedCalendarDate = item.date;
+      calendarCursor = firstDayOfMonth(parseLocalDate(item.date));
+      addActivity(eventIcon(item.type), `Evento: ${item.title}`);
+      closeSheet();
+      commit(["calendarEvents", "activity"], "Evento guardado");
+    });
+  }
+
+  function deleteCalendarEvent(id) {
+    const event = state.calendarEvents.find((item) => item.id === id);
+    if (!event || !confirm(`¿Eliminar "${event.title}"?`)) return;
+    state.calendarEvents = state.calendarEvents.filter((item) => item.id !== id);
+    addActivity("🗑️", `Evento eliminado: ${event.title}`);
+    commit(["calendarEvents", "activity"], "Evento eliminado");
+  }
+
+  function exportData() {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `la-cuadra-${todayISO()}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function importData(file) {
+    try {
+      const imported = normalizeState(JSON.parse(await file.text()));
+      state = imported;
+      addActivity("📥", "Copia de datos importada");
+      pendingDocuments = new Set(DOCUMENT_KEYS);
+      persistPendingDocuments();
+      closeSheet();
+      commit(DOCUMENT_KEYS, "Datos importados");
+    } catch {
+      alert("El archivo no parece una copia válida de La Cuadra.");
+    }
+  }
+
+  function openInstallHelp() {
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    const installed = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone;
+    if (installed) {
+      toast("La Cuadra ya está instalada");
+      return;
+    }
+
+    if (deferredInstallPrompt) {
+      deferredInstallPrompt.prompt();
+      deferredInstallPrompt.userChoice.then(({ outcome }) => {
+        if (outcome === "accepted") toast("Instalación iniciada");
+        deferredInstallPrompt = null;
+      });
+      return;
+    }
+
+    openSheet("Instalar La Cuadra", isIOS
+      ? `<div class="install-steps">
+          <div class="install-step"><b>1</b><div>Abre esta página con <strong>Safari</strong>.</div></div>
+          <div class="install-step"><b>2</b><div>Pulsa el botón <strong>Compartir</strong>.</div></div>
+          <div class="install-step"><b>3</b><div>Elige <strong>Añadir a pantalla de inicio</strong>.</div></div>
+        </div>`
+      : `<div class="install-steps">
+          <div class="install-step"><b>1</b><div>Abre el menú del navegador.</div></div>
+          <div class="install-step"><b>2</b><div>Busca <strong>Instalar aplicación</strong> o <strong>Añadir a pantalla de inicio</strong>.</div></div>
+          <div class="install-step"><b>3</b><div>La instalación solo aparece al abrir la app desde una dirección HTTPS, como GitHub Pages.</div></div>
+        </div>`);
+  }
+
+  function setupConfigHTML() {
+    return `<div class="warning-note">
+      La app funciona localmente, pero todavía no tiene configurado Firebase. Crea la aplicación web en Firebase, activa Authentication y Firestore, publica <code>firebase/firestore.rules</code> y completa <code>config.js</code>.
+    </div>
+    <button class="secondary-button" id="exportLocalButton" type="button">Exportar copia local</button>
+    <label class="secondary-button" for="importLocalInput" style="display:block;text-align:center;cursor:pointer">Importar copia</label>
+    <input class="hidden" id="importLocalInput" type="file" accept=".json,application/json">`;
+  }
+
+  function openAccountSheet() {
+    if (!cloudConfigured) {
+      openSheet("Configurar Firebase", setupConfigHTML());
+      $("exportLocalButton").addEventListener("click", exportData);
+      $("importLocalInput").addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) importData(file);
+      });
+      return;
+    }
+
+    if (!firebaseReady) {
+      openSheet("Conectando con Firebase", `<div class="${firebaseLoadError ? "warning-note" : "auth-note"}">
+        ${firebaseLoadError
+          ? `No se ha podido cargar Firebase. La interfaz local sigue funcionando.<br><br><strong>Detalle:</strong> ${escapeHTML(firebaseLoadError)}`
+          : "Firebase se está cargando. Espera unos segundos y vuelve a pulsar Conectar."}
+      </div>
+      <button class="secondary-button" id="retryFirebaseButton" type="button">Reintentar conexión</button>`);
+      $("retryFirebaseButton").addEventListener("click", async () => {
+        firebaseLoadError = "";
+        closeSheet();
+        renderAll();
+        await initCloud();
+      });
+      return;
+    }
+
+    if (!currentSession) {
+      openAuthForm();
+      return;
+    }
+
+    if (!currentFarm) {
+      openFarmSetup();
+      return;
+    }
+
+    openSheet("Cuenta y sincronización", `<div class="account-summary">
+      <strong>${escapeHTML(currentFarm.name)}</strong>
+      <span>${escapeHTML(currentSession.user.email)} · ${currentFarm.role === "owner" ? "Propietario" : "Miembro"}</span>
+    </div>
+    <div class="auth-note">Firebase mantiene los mismos datos en vuestros dos móviles y guarda los cambios pendientes cuando no hay conexión.</div>
+    <div class="code-box"><div><small>Código para unir a tu pareja</small><b>${escapeHTML(currentFarm.invite_code)}</b></div><button id="copyInviteCode" type="button">Copiar</button></div>
+    <button class="secondary-button" id="forceSyncButton" type="button">Sincronizar ahora</button>
+    <button class="secondary-button" id="exportCloudButton" type="button">Exportar copia</button>
+    <label class="secondary-button" for="importCloudInput" style="display:block;text-align:center;cursor:pointer">Importar copia</label>
+    <input class="hidden" id="importCloudInput" type="file" accept=".json,application/json">
+    <button class="secondary-button danger-text" id="signOutButton" type="button">Cerrar sesión</button>`);
+
+    $("copyInviteCode").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(currentFarm.invite_code);
+        toast("Código copiado");
+      } catch {
+        prompt("Copia este código:", currentFarm.invite_code);
+      }
+    });
+    $("forceSyncButton").addEventListener("click", async () => {
+      pendingDocuments = new Set(DOCUMENT_KEYS);
+      persistPendingDocuments();
+      await flushRemoteSync();
+    });
+    $("exportCloudButton").addEventListener("click", exportData);
+    $("importCloudInput").addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (file) importData(file);
+    });
+    $("signOutButton").addEventListener("click", async () => {
+      await signOut(firebaseAuth);
+      closeSheet();
+    });
+  }
+
+  function friendlyFirebaseError(error) {
+    const code = error?.code || "";
+    const messages = {
+      "auth/email-already-in-use": "Ese correo ya tiene una cuenta.",
+      "auth/invalid-credential": "Correo o contraseña incorrectos.",
+      "auth/invalid-email": "El correo no es válido.",
+      "auth/weak-password": "La contraseña debe tener al menos 6 caracteres.",
+      "auth/too-many-requests": "Demasiados intentos. Espera un poco y vuelve a probar.",
+      "auth/network-request-failed": "No se pudo conectar con Firebase."
+    };
+    return messages[code] || error?.message || "Se ha producido un error.";
+  }
+
+  function openAuthForm(mode = "login") {
+    const registering = mode === "register";
+    openSheet(registering ? "Crear cuenta" : "Iniciar sesión", `<div class="auth-note">
+      Cada persona utiliza su propio correo. Después ambas cuentas se unen a la misma explotación mediante un código.
+    </div>
+    <form id="authForm">
+      <div class="form-grid">
+        <div class="field full"><label for="authEmail">Correo electrónico</label><input id="authEmail" type="email" autocomplete="email" required></div>
+        <div class="field full"><label for="authPassword">Contraseña</label><input id="authPassword" type="password" autocomplete="${registering ? "new-password" : "current-password"}" minlength="6" required></div>
+      </div>
+      <button class="primary-button" type="submit">${registering ? "Crear cuenta" : "Entrar"}</button>
+    </form>
+    <button class="secondary-button" id="toggleAuthMode" type="button">${registering ? "Ya tengo cuenta" : "Crear una cuenta nueva"}</button>
+    ${registering ? "" : `<button class="secondary-button" id="resetPasswordButton" type="button">He olvidado la contraseña</button>`}`);
+
+    $("toggleAuthMode").addEventListener("click", () => openAuthForm(registering ? "login" : "register"));
+    $("authForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const email = $("authEmail").value.trim();
+      const password = $("authPassword").value;
+      setSyncStatus("syncing", "● Entrando…");
+      try {
+        if (registering) {
+          await createUserWithEmailAndPassword(firebaseAuth, email, password);
+          closeSheet();
+          toast("Cuenta creada");
+        } else {
+          await signInWithEmailAndPassword(firebaseAuth, email, password);
+          closeSheet();
+        }
+      } catch (error) {
+        toast(friendlyFirebaseError(error));
+        renderSyncStatus();
+      }
+    });
+
+    if (!registering) {
+      $("resetPasswordButton").addEventListener("click", async () => {
+        const email = $("authEmail").value.trim();
+        if (!email) {
+          toast("Escribe primero tu correo");
+          return;
+        }
+        try {
+          await sendPasswordResetEmail(firebaseAuth, email);
+          toast("Correo de recuperación enviado");
+        } catch (error) {
+          toast(friendlyFirebaseError(error));
+        }
+      });
+    }
+  }
+
+  function generateInviteCode(length = 10) {
+    const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    const values = new Uint32Array(length);
+    crypto.getRandomValues(values);
+    return [...values].map((value) => alphabet[value % alphabet.length]).join("");
+  }
+
+  function openFarmSetup() {
+    openSheet("Compartir la explotación", `<div class="auth-note">
+      La primera persona crea la explotación. La segunda entra con su propio correo e introduce el código de invitación.
+    </div>
+    <form id="createFarmForm">
+      <div class="field"><label for="farmName">Nombre de la explotación</label><input id="farmName" value="Mi rebaño" required></div>
+      <button class="primary-button" type="submit">Crear explotación compartida</button>
+    </form>
+    <div class="section-head compact" style="margin-top:22px"><div><h2>O unirme a una existente</h2></div></div>
+    <form id="joinFarmForm">
+      <div class="field"><label for="inviteCode">Código de 10 caracteres</label><input id="inviteCode" maxlength="10" required style="text-transform:uppercase"></div>
+      <button class="secondary-button" type="submit">Unirme con el código</button>
+    </form>
+    <button class="secondary-button danger-text" id="setupSignOut" type="button">Cerrar sesión</button>`);
+
+    $("createFarmForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      try {
+        const farmRef = doc(collection(firestoreDb, "laCuadraFarms"));
+        const inviteCode = generateInviteCode();
+        const name = $("farmName").value.trim();
+
+        await setDoc(farmRef, {
+          name,
+          ownerId: currentSession.user.id,
+          inviteCode,
+          createdAt: serverTimestamp()
+        });
+        await setDoc(doc(firestoreDb, "laCuadraMembers", currentSession.user.id), {
+          farmId: farmRef.id,
+          role: "owner",
+          inviteCode,
+          joinedAt: serverTimestamp()
+        });
+        await setDoc(doc(firestoreDb, "laCuadraInvites", inviteCode), {
+          farmId: farmRef.id,
+          createdBy: currentSession.user.id,
+          createdAt: serverTimestamp()
+        });
+
+        currentFarm = {
+          farm_id: farmRef.id,
+          name,
+          invite_code: inviteCode,
+          role: "owner"
+        };
+        await initializeCloudDocuments();
+        closeSheet();
+        renderAll();
+        toast("Explotación creada");
+      } catch (error) {
+        toast(error.message || "No se pudo crear la explotación.");
+      }
+    });
+
+    $("joinFarmForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const code = $("inviteCode").value.trim().toUpperCase();
+      try {
+        const inviteSnapshot = await getDoc(doc(firestoreDb, "laCuadraInvites", code));
+        if (!inviteSnapshot.exists()) {
+          toast("Código de invitación no válido");
+          return;
+        }
+        const farmId = inviteSnapshot.data().farmId;
+        await setDoc(doc(firestoreDb, "laCuadraMembers", currentSession.user.id), {
+          farmId,
+          role: "member",
+          inviteCode: code,
+          joinedAt: serverTimestamp()
+        });
+
+        const farmSnapshot = await getDoc(doc(firestoreDb, "laCuadraFarms", farmId));
+        if (!farmSnapshot.exists()) throw new Error("No se ha encontrado la explotación.");
+        const farm = farmSnapshot.data();
+        currentFarm = {
+          farm_id: farmId,
+          name: farm.name,
+          invite_code: farm.inviteCode,
+          role: "member"
+        };
+        await loadCloudDocuments();
+        await subscribeRealtime();
+        closeSheet();
+        renderAll();
+        toast("Ya compartís los mismos datos");
+      } catch (error) {
+        toast(error.message || "No se pudo unir la cuenta.");
+      }
+    });
+
+    $("setupSignOut").addEventListener("click", async () => {
+      await signOut(firebaseAuth);
+      closeSheet();
+    });
+  }
+
+  function setSyncStatus(cssClass, text) {
+    const element = $("syncStatus");
+    element.className = `status-pill ${cssClass}`;
+    element.textContent = text;
+  }
+
+  async function initCloud() {
+    if (!cloudConfigured) {
+      renderSyncStatus();
+      return;
+    }
+    if (firebaseReady && firebaseAuth && firestoreDb) {
+      renderSyncStatus();
+      return;
+    }
+
+    firebaseLoadError = "";
+    renderSyncStatus();
+
+    try {
+      const [appSdk, authSdk, firestoreSdk] = await Promise.all([
+        import(`https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-app.js`),
+        import(`https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-auth.js`),
+        import(`https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-firestore.js`)
+      ]);
+
+      ({ initializeApp } = appSdk);
+      ({
+        getAuth,
+        onAuthStateChanged,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        signOut,
+        sendPasswordResetEmail
+      } = authSdk);
+      ({
+        initializeFirestore,
+        getFirestore,
+        persistentLocalCache,
+        persistentMultipleTabManager,
+        doc,
+        collection,
+        setDoc,
+        getDoc,
+        getDocs,
+        onSnapshot,
+        serverTimestamp
+      } = firestoreSdk);
+
+      firebaseApp = initializeApp(config);
+      firebaseAuth = getAuth(firebaseApp);
+
+      try {
+        firestoreDb = initializeFirestore(firebaseApp, {
+          localCache: persistentLocalCache({
+            tabManager: persistentMultipleTabManager()
+          })
+        });
+      } catch {
+        firestoreDb = getFirestore(firebaseApp);
+      }
+
+      firebaseReady = true;
+      renderAll();
+
+      onAuthStateChanged(firebaseAuth, (user) => {
+        handleFirebaseUser(user);
+      });
+    } catch (error) {
+      firebaseReady = false;
+      firebaseLoadError = error?.message || String(error);
+      console.error("Error cargando Firebase:", error);
+      renderAll();
+      toast("La app funciona, pero Firebase no ha podido conectarse");
+    }
+  }
+
+  async function handleFirebaseUser(user) {
+    currentSession = user ? {
+      user: {
+        id: user.uid,
+        email: user.email || ""
+      }
+    } : null;
+
+    if (!user) {
+      currentFarm = null;
+      if (unsubscribeFarmDocuments) {
+        unsubscribeFarmDocuments();
+        unsubscribeFarmDocuments = null;
+      }
+      renderAll();
+      return;
+    }
+
+    setSyncStatus("syncing", "● Cargando…");
+    try {
+      const membershipSnapshot = await getDoc(doc(firestoreDb, "laCuadraMembers", user.uid));
+      if (!membershipSnapshot.exists()) {
+        currentFarm = null;
+        renderAll();
+        return;
+      }
+
+      const membership = membershipSnapshot.data();
+      const farmSnapshot = await getDoc(doc(firestoreDb, "laCuadraFarms", membership.farmId));
+      if (!farmSnapshot.exists()) throw new Error("La explotación ya no existe.");
+      const farm = farmSnapshot.data();
+
+      currentFarm = {
+        farm_id: membership.farmId,
+        name: farm.name,
+        invite_code: farm.inviteCode,
+        role: membership.role
+      };
+
+      await loadCloudDocuments();
+      await subscribeRealtime();
+      await flushRemoteSync();
+      renderAll();
+    } catch (error) {
+      toast(`No se pudo cargar la explotación: ${error.message}`);
+      renderAll();
+    }
+  }
+
+  async function initializeCloudDocuments() {
+    if (!currentFarm) return;
+    pendingDocuments = new Set(DOCUMENT_KEYS);
+    persistPendingDocuments();
+    await flushRemoteSync();
+    await subscribeRealtime();
+  }
+
+  async function loadCloudDocuments() {
+    if (!currentFarm || !firestoreDb) return;
+    try {
+      const snapshot = await getDocs(collection(
+        firestoreDb, "laCuadraFarms", currentFarm.farm_id, "documents"
+      ));
+
+      if (snapshot.empty) {
+        await initializeCloudDocuments();
+        return;
+      }
+
+      applyingRemote = true;
+      snapshot.forEach((documentSnapshot) => {
+        const key = documentSnapshot.id;
+        const row = documentSnapshot.data();
+        if (DOCUMENT_KEYS.includes(key) && Array.isArray(row.data)) {
+          state[key] = row.data;
+        }
+      });
+      applyingRemote = false;
+      persistLocal();
+      renderAll();
+    } catch (error) {
+      toast(`Error al descargar datos: ${error.message}`);
+    }
+  }
+
+  async function subscribeRealtime() {
+    if (!currentFarm || !firestoreDb) return;
+    if (unsubscribeFarmDocuments) unsubscribeFarmDocuments();
+
+    unsubscribeFarmDocuments = onSnapshot(
+      collection(firestoreDb, "laCuadraFarms", currentFarm.farm_id, "documents"),
+      { includeMetadataChanges: true },
+      (snapshot) => {
+        let updatedByOtherUser = false;
+        applyingRemote = true;
+
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "removed") return;
+          const key = change.doc.id;
+          const row = change.doc.data();
+          if (DOCUMENT_KEYS.includes(key) && Array.isArray(row.data)) {
+            state[key] = row.data;
+            if (row.updatedBy && row.updatedBy !== currentSession?.user?.id) {
+              updatedByOtherUser = true;
+            }
+          }
+        });
+
+        applyingRemote = false;
+        persistLocal();
+        renderAll();
+
+        if (snapshot.metadata.hasPendingWrites) {
+          setSyncStatus("syncing", "● Sincronizando…");
+        } else if (snapshot.metadata.fromCache && !navigator.onLine) {
+          setSyncStatus("offline", "● Sin conexión");
+        } else {
+          pendingDocuments.clear();
+          persistPendingDocuments();
+          setSyncStatus("online", "● Sincronizado");
+        }
+
+        if (updatedByOtherUser && !snapshot.metadata.hasPendingWrites) {
+          toast("Datos actualizados desde el otro móvil");
+        }
+      },
+      (error) => {
+        toast(`Error de sincronización: ${error.message}`);
+        renderSyncStatus();
+      }
+    );
+  }
+
+  function scheduleRemoteSync() {
+    if (!cloudConfigured || !currentFarm || !currentSession) {
+      renderSyncStatus();
+      return;
+    }
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(flushRemoteSync, 350);
+  }
+
+  async function flushRemoteSync() {
+    if (!firestoreDb || !currentFarm || !currentSession || !pendingDocuments.size) {
+      renderSyncStatus();
+      return;
+    }
+
+    setSyncStatus(navigator.onLine ? "syncing" : "offline",
+      navigator.onLine ? "● Sincronizando…" : "● Pendiente");
+
+    const keys = [...pendingDocuments];
+    try {
+      await Promise.all(keys.map((key) => setDoc(
+        doc(firestoreDb, "laCuadraFarms", currentFarm.farm_id, "documents", key),
+        {
+          data: state[key],
+          updatedAt: serverTimestamp(),
+          updatedBy: currentSession.user.id
+        },
+        { merge: true }
+      )));
+      keys.forEach((key) => pendingDocuments.delete(key));
+      persistPendingDocuments();
+      renderSyncStatus();
+    } catch (error) {
+      toast(`Pendiente de sincronizar: ${error.message}`);
+      renderSyncStatus();
+    }
+  }
+
+  function registerServiceWorker() {
+    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+      navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+    }
+  }
+
+  function handleInitialView() {
+    const requested = new URLSearchParams(location.search).get("view");
+    if (!requested || !$(requested)) return;
+    document.querySelectorAll(".bottom-nav button").forEach((button) => {
+      button.classList.toggle("active", button.dataset.view === requested);
+    });
+    document.querySelectorAll(".view").forEach((view) => {
+      view.classList.toggle("active", view.id === requested);
+    });
+  }
+
+  document.querySelectorAll(".bottom-nav button").forEach((button) => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll(".bottom-nav button").forEach((item) => item.classList.remove("active"));
+      document.querySelectorAll(".view").forEach((view) => view.classList.remove("active"));
+      button.classList.add("active");
+      $(button.dataset.view).classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  });
+
+  document.querySelectorAll("#goatFilters .filter-chip").forEach((button) => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll("#goatFilters .filter-chip").forEach((item) => item.classList.remove("active"));
+      button.classList.add("active");
+      goatFilter = button.dataset.filter;
+      renderGoats();
+    });
+  });
+
+  document.querySelectorAll("[data-action]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const action = button.dataset.action;
+      if (action === "goat") openGoatForm();
+      if (action === "hen") openHenForm();
+      if (action === "egg") openEggForm();
+      if (action === "pregnancy") openPregnancyForm();
+      if (action === "birth") openBirthForm();
+      if (action === "feed") openFeedForm();
+      if (action === "history") openHistoryForm();
+    });
+  });
+
+  $("floatingAdd").addEventListener("click", openActionMenu);
+  $("closeSheet").addEventListener("click", closeSheet);
+  $("overlay").addEventListener("click", (event) => {
+    if (event.target === $("overlay")) closeSheet();
+  });
+
+  $("sheetBody").addEventListener("click", (event) => {
+    const actionButton = event.target.closest("[data-sheet-action]");
+    if (!actionButton) return;
+    const action = actionButton.dataset.sheetAction;
+    if (action === "goat") openGoatForm();
+    if (action === "hen") openHenForm();
+    if (action === "egg") openEggForm();
+    if (action === "pregnancy") openPregnancyForm();
+    if (action === "birth") openBirthForm();
+    if (action === "feed") openFeedForm();
+    if (action === "calendar") openCalendarEventForm();
+    if (action === "history") openHistoryForm();
+  });
+
+  document.body.addEventListener("click", (event) => {
+    const editGoat = event.target.closest("[data-edit-goat]");
+    if (editGoat) openGoatForm(editGoat.dataset.editGoat);
+
+    const newPregnancy = event.target.closest("[data-new-pregnancy]");
+    if (newPregnancy) openPregnancyForm("", newPregnancy.dataset.newPregnancy);
+
+    const editPregnancy = event.target.closest("[data-edit-pregnancy]");
+    if (editPregnancy) openPregnancyForm(editPregnancy.dataset.editPregnancy);
+
+    const registerBirth = event.target.closest("[data-register-birth]");
+    if (registerBirth) openBirthForm(registerBirth.dataset.registerBirth);
+
+    const deletePregnancyButton = event.target.closest("[data-delete-pregnancy]");
+    if (deletePregnancyButton) deletePregnancy(deletePregnancyButton.dataset.deletePregnancy);
+
+    const editHen = event.target.closest("[data-edit-hen]");
+    if (editHen) openHenForm(editHen.dataset.editHen);
+
+    const newEggs = event.target.closest("[data-new-eggs]");
+    if (newEggs) openEggForm(newEggs.dataset.newEggs);
+
+    const calendarDay = event.target.closest("[data-calendar-date]");
+    if (calendarDay) {
+      selectedCalendarDate = calendarDay.dataset.calendarDate;
+      const selectedDate = parseLocalDate(selectedCalendarDate);
+      calendarCursor = firstDayOfMonth(selectedDate);
+      renderCalendar();
+    }
+
+    const deleteEventButton = event.target.closest("[data-delete-calendar-event]");
+    if (deleteEventButton) deleteCalendarEvent(deleteEventButton.dataset.deleteCalendarEvent);
+  });
+
+  $("calendarPrevious").addEventListener("click", () => {
+    calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth() - 1, 1);
+    renderCalendar();
+  });
+  $("calendarNext").addEventListener("click", () => {
+    calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth() + 1, 1);
+    renderCalendar();
+  });
+  $("calendarToday").addEventListener("click", () => {
+    selectedCalendarDate = todayISO();
+    calendarCursor = firstDayOfMonth(new Date());
+    renderCalendar();
+  });
+  $("addCalendarEvent").addEventListener("click", () => openCalendarEventForm(selectedCalendarDate));
+
+  $("eggMinus").addEventListener("click", () => {
+    quickEggs = Math.max(0, quickEggs - 1);
+    $("quickEggValue").textContent = quickEggs;
+  });
+  $("eggPlus").addEventListener("click", () => {
+    quickEggs += 1;
+    $("quickEggValue").textContent = quickEggs;
+  });
+  $("saveQuickEggs").addEventListener("click", () => {
+    state.eggs = state.eggs.filter((entry) => !(entry.date === todayISO() && entry.dailyTotal));
+    state.eggs.push({
+      id: uid("egg"),
+      date: todayISO(),
+      count: quickEggs,
+      groupId: "",
+      notes: "Total diario",
+      dailyTotal: true
+    });
+    addActivity("🥚", `${quickEggs} huevos recogidos hoy`);
+    commit(["eggs", "activity"], "Total diario guardado");
+  });
+
+  $("accountButton").addEventListener("click", openAccountSheet);
+  $("syncStatus").addEventListener("click", openAccountSheet);
+  $("installButton").addEventListener("click", openInstallHelp);
+
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    $("installButton").classList.remove("hidden");
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    toast("La Cuadra se ha instalado");
+  });
+
+  window.addEventListener("online", () => {
+    renderAll();
+    flushRemoteSync();
+  });
+  window.addEventListener("offline", renderAll);
+  window.addEventListener("focus", () => {
+    renderAll();
+    flushRemoteSync();
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+      renderAll();
+      flushRemoteSync();
+    }
+  });
+
+  setInterval(() => {
+    renderHome();
+    renderGoats();
+    renderCalendar();
+  }, 60000);
+
+  handleInitialView();
+  renderAll();
+  setTimeout(() => {
+    initCloud();
+  }, 0);
+})();
+
+</script>
+</body>
+</html>

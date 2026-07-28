@@ -1,0 +1,18 @@
+PRUEBA PRIMERO APP-NUEVA.html
+
+1. Sube APP-NUEVA.html a la raíz del repositorio La-cuadra.
+2. No borres todavía nada.
+3. Espera aproximadamente un minuto.
+4. Abre:
+   https://jose123xd21-alt.github.io/La-cuadra/APP-NUEVA.html?v=9
+5. Comprueba los botones Cabras, Gallinas, Pienso y Conectar.
+
+Cuando funcione:
+6. Sube el index.html incluido y sustituye el index.html anterior.
+7. Abre:
+   https://jose123xd21-alt.github.io/La-cuadra/?v=9
+
+Esta versión contiene HTML, estilos, configuración y aplicación en un único archivo.
+No depende de app.js, styles.css, config.js ni service-worker.js para arrancar.
+No borra los datos de animales guardados, pero elimina la caché y desactiva
+service workers antiguos que podían estar sirviendo versiones anteriores.
