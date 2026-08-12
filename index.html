@@ -61,7 +61,7 @@ button{cursor:pointer}.hidden{display:none!important}
   background:var(--card);border:1px solid var(--line);border-radius:24px;padding:19px;
   box-shadow:0 10px 30px #18392e0d
 }
-.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
 .metric{background:#f2ede3;border-radius:18px;padding:14px;min-width:0}
 .metric b{display:block;font-size:28px;letter-spacing:-.04em;overflow-wrap:anywhere}
 .metric span{font-size:12px;color:var(--muted);font-weight:750}
@@ -108,7 +108,7 @@ button{cursor:pointer}.hidden{display:none!important}
 .day-event-icon{width:38px;height:38px;border-radius:12px;background:#edf3ef;display:grid;place-items:center}
 .day-event strong{display:block}.day-event small{display:block;color:var(--muted);margin-top:3px;line-height:1.4}
 .delete-icon{border:0;background:transparent;color:var(--red);font-weight:900;padding:5px}
-.pregnancy-card{border:1px solid var(--line);border-radius:19px;padding:15px;background:white}
+.pregnancy-card,.litter-card{border:1px solid var(--line);border-radius:19px;padding:15px;background:white}
 .pregnancy-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.pregnancy-top strong{display:block}.pregnancy-top small{display:block;color:var(--muted);margin-top:3px}
 .progress{height:9px;background:#ece8df;border-radius:999px;overflow:hidden;margin:13px 0}.progress div{height:100%;background:var(--green-2);border-radius:999px}
 .row-actions{display:flex;gap:8px;flex-wrap:wrap}.row-actions button{border:1px solid var(--line);background:white;border-radius:11px;padding:8px 10px;color:var(--green);font-weight:850;font-size:12px}
@@ -126,8 +126,8 @@ button{cursor:pointer}.hidden{display:none!important}
 .timeline-item:last-child{padding-bottom:0}.timeline-item h3{margin:0 0 6px;font-size:20px}.timeline-item p{margin:0;line-height:1.5;color:#405149}
 .name-chips{display:flex;flex-wrap:wrap;gap:8px}.name-chip{padding:8px 11px;border-radius:999px;background:#edf3ef;color:var(--green-2);font-weight:850;font-size:13px}
 .name-chip.archived{background:#efeeeb;color:#68736e}
-.bottom-nav{position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(650px,calc(100% - 22px));padding:8px;display:grid;grid-template-columns:repeat(5,1fr);background:#fffdf8ee;backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:23px;box-shadow:0 18px 55px #18392e2b;z-index:40}
-.bottom-nav button{border:0;background:transparent;border-radius:16px;padding:8px 2px;color:#7a8882;font-size:10px;font-weight:850}.bottom-nav b{display:block;font-size:20px;margin-bottom:3px}.bottom-nav button.active{background:var(--green);color:white}
+.bottom-nav{position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(720px,calc(100% - 22px));padding:8px;display:grid;grid-template-columns:repeat(6,1fr);background:#fffdf8ee;backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:23px;box-shadow:0 18px 55px #18392e2b;z-index:40}
+.bottom-nav button{border:0;background:transparent;border-radius:16px;padding:8px 1px;color:#7a8882;font-size:9px;font-weight:850}.bottom-nav b{display:block;font-size:19px;margin-bottom:3px}.bottom-nav button.active{background:var(--green);color:white}
 .floating-add{position:fixed;right:22px;bottom:101px;width:58px;height:58px;border:0;border-radius:20px;background:var(--gold);font-size:30px;color:#48310f;box-shadow:0 15px 34px #80571544;z-index:35}
 .overlay{position:fixed;inset:0;background:#10211c88;backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;padding:12px;z-index:80}
 .sheet{width:min(640px,100%);max-height:92vh;overflow:auto;background:var(--card);border-radius:29px 29px 21px 21px;box-shadow:0 -20px 70px #0004}
@@ -233,7 +233,7 @@ button{cursor:pointer}.hidden{display:none!important}
         <div class="logo"><img src="./icon-192.png" alt=""></div>
         <div>
           <strong>La Granja de la Abuela</strong>
-          <small>Gestión compartida de animales</small>
+          <small>Gestión compartida de la granja</small>
         </div>
       </div>
       <div class="top-actions">
@@ -270,6 +270,7 @@ button{cursor:pointer}.hidden{display:none!important}
           <article class="card">
             <div class="metrics">
               <div class="metric"><b id="metricGoats">0</b><span>cabras actuales</span></div>
+              <div class="metric"><b id="metricRabbits">0</b><span>conejos actuales</span></div>
               <div class="metric"><b id="metricHens">0</b><span>gallinas</span></div>
               <div class="metric"><b id="metricEggs">0</b><span>huevos hoy</span></div>
             </div>
@@ -295,7 +296,7 @@ button{cursor:pointer}.hidden{display:none!important}
         </div>
 
         <div class="filter-tabs" id="goatFilters">
-          <button class="filter-chip active" data-filter="Todas" type="button">Todas</button>
+          <button class="filter-chip active" data-filter="Actuales" type="button">Actuales</button>
           <button class="filter-chip" data-filter="Gestante" type="button">Gestantes</button>
           <button class="filter-chip" data-filter="Activo" type="button">Activos</button>
           <button class="filter-chip" data-filter="Lactación" type="button">Lactación</button>
@@ -336,6 +337,36 @@ button{cursor:pointer}.hidden{display:none!important}
           <button class="text-button" data-action="pregnancy" type="button">Añadir cubrición</button>
         </div>
         <div class="stack" id="pregnancyList"></div>
+      </section>
+
+
+      <section class="view" id="rabbitsView">
+        <div class="page-title">
+          <div><h1>Conejos</h1><p>Madres, macho, cubriciones, partos y camadas.</p></div>
+          <button class="round-add" data-action="rabbit" type="button">+</button>
+        </div>
+
+        <div class="filter-tabs" id="rabbitFilters">
+          <button class="filter-chip active" data-filter="Actuales" type="button">Actuales</button>
+          <button class="filter-chip" data-filter="Hembras" type="button">Madres</button>
+          <button class="filter-chip" data-filter="Machos" type="button">Macho</button>
+          <button class="filter-chip" data-filter="Gestante" type="button">Gestantes</button>
+          <button class="filter-chip" data-filter="Baja" type="button">Bajas</button>
+        </div>
+
+        <div class="animal-grid" id="rabbitGrid"></div>
+
+        <div class="section-head">
+          <div><h2>Cubriciones activas</h2><p>Día de cubrición y parto estimado</p></div>
+          <button class="text-button" data-action="rabbit-pregnancy" type="button">Añadir cubrición</button>
+        </div>
+        <div class="stack" id="rabbitPregnancyList"></div>
+
+        <div class="section-head">
+          <div><h2>Camadas con la madre</h2><p>Crías que tiene actualmente cada coneja</p></div>
+          <button class="text-button" data-action="rabbit-litter" type="button">Registrar parto</button>
+        </div>
+        <div class="stack" id="rabbitLitterList"></div>
       </section>
 
       <section class="view" id="hensView">
@@ -411,6 +442,7 @@ button{cursor:pointer}.hidden{display:none!important}
   <nav class="bottom-nav" aria-label="Navegación principal">
     <button class="active" data-view="homeView" type="button"><b>⌂</b>Hoy</button>
     <button data-view="goatsView" type="button"><b>🐐</b>Cabras</button>
+    <button data-view="rabbitsView" type="button"><b>🐇</b>Conejos</button>
     <button data-view="hensView" type="button"><b>🐔</b>Gallinas</button>
     <button data-view="feedView" type="button"><b>🌾</b>Pienso</button>
     <button data-view="historyView" type="button"><b>⌛</b>Historial</button>
@@ -448,11 +480,12 @@ button{cursor:pointer}.hidden{display:none!important}
   let persistentLocalCache, persistentMultipleTabManager;
   let doc, collection, setDoc, getDoc, getDocs, onSnapshot, serverTimestamp;
 
-  const APP_VERSION = 10;
+  const APP_VERSION = 11;
   const LOCAL_KEY = "laCuadraPwaStateV9";
   const PENDING_KEY = "laCuadraPendingDocumentsV9";
   const DOCUMENT_KEYS = [
-    "goats", "pregnancies", "hens", "eggs", "feed", "births",
+    "goats", "pregnancies", "rabbits", "rabbitPregnancies", "rabbitLitters",
+    "hens", "eggs", "feed", "births",
     "historyEvents", "archivedAnimals", "activity", "calendarEvents"
   ];
 
@@ -460,6 +493,9 @@ button{cursor:pointer}.hidden{display:none!important}
     version: APP_VERSION,
     goats: [],
     pregnancies: [],
+    rabbits: [],
+    rabbitPregnancies: [],
+    rabbitLitters: [],
     hens: [],
     eggs: [],
     feed: [],
@@ -481,7 +517,8 @@ button{cursor:pointer}.hidden{display:none!important}
   );
 
   let state = loadLocalState();
-  let goatFilter = "Todas";
+  let goatFilter = "Actuales";
+  let rabbitFilter = "Actuales";
   let quickEggs = 0;
   let calendarCursor = firstDayOfMonth(new Date());
   let selectedCalendarDate = todayISO();
@@ -767,10 +804,157 @@ button{cursor:pointer}.hidden{display:none!important}
     </div>`;
   }
 
+
+  function rabbitDueDate(pregnancy) {
+    if (pregnancy.mating) return addDays(pregnancy.mating, Number(pregnancy.days || 31));
+    return pregnancy.due || "";
+  }
+
+  function rabbitDaysLeft(pregnancy) {
+    const due = rabbitDueDate(pregnancy);
+    return due ? daysBetween(todayISO(), due) : Number.NaN;
+  }
+
+  function activeRabbitLitter(motherId) {
+    return state.rabbitLitters
+      .filter((litter) => litter.motherId === motherId && litter.status === "Con madre")
+      .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")))[0] || null;
+  }
+
+  function rabbitCountdownMarkup(pregnancy, compact = false) {
+    const rabbit = state.rabbits.find((item) => item.id === pregnancy.rabbitId);
+    const male = state.rabbits.find((item) => item.id === pregnancy.maleId);
+    const due = rabbitDueDate(pregnancy);
+    const left = rabbitDaysLeft(pregnancy);
+    let label = "Sin fecha";
+    let cssClass = "";
+    let number = "—";
+
+    if (Number.isFinite(left)) {
+      number = Math.abs(left);
+      if (left < 0) {
+        label = "días de retraso";
+        cssClass = "late";
+      } else if (left === 0) {
+        label = "previsto hoy";
+        cssClass = "today";
+        number = "Hoy";
+      } else {
+        label = left === 1 ? "día" : "días";
+      }
+    }
+
+    if (compact) {
+      return `<div class="birth-row">
+        <div class="avatar">🐇</div>
+        <div>
+          <strong>${escapeHTML(rabbit?.name || "Coneja")}</strong>
+          <small>Parto estimado · ${formatDate(due)}</small>
+        </div>
+        <div class="days-left ${cssClass}"><b>${number}</b>${label}</div>
+      </div>`;
+    }
+
+    const total = Number(pregnancy.days || 31);
+    const elapsed = Math.max(0, total - Math.max(0, left));
+    const progress = Math.max(0, Math.min(100, (elapsed / total) * 100));
+
+    return `<div class="pregnancy-card">
+      <div class="pregnancy-top">
+        <div>
+          <strong>🐇 ${escapeHTML(rabbit?.name || "Coneja")}</strong>
+          <small>Cubrición: ${formatDate(pregnancy.mating)} · Parto estimado: ${formatDate(due)}
+            ${male ? ` · Macho: ${escapeHTML(male.name)}` : ""}</small>
+        </div>
+        <div class="days-left ${cssClass}"><b>${number}</b>${label}</div>
+      </div>
+      <div class="progress"><div style="width:${progress}%"></div></div>
+      <div class="row-actions">
+        <button type="button" data-edit-rabbit-pregnancy="${pregnancy.id}">Editar</button>
+        <button type="button" data-register-rabbit-litter="${pregnancy.rabbitId}">Registrar parto</button>
+        <button type="button" class="danger" data-delete-rabbit-pregnancy="${pregnancy.id}">Cancelar gestación</button>
+      </div>
+    </div>`;
+  }
+
+  function renderRabbits() {
+    let rabbits = [...state.rabbits];
+    if (rabbitFilter === "Actuales") rabbits = rabbits.filter((rabbit) => rabbit.status !== "Baja");
+    else if (rabbitFilter === "Hembras") rabbits = rabbits.filter((rabbit) => rabbit.sex === "Hembra" && rabbit.status !== "Baja");
+    else if (rabbitFilter === "Machos") rabbits = rabbits.filter((rabbit) => rabbit.sex === "Macho" && rabbit.status !== "Baja");
+    else rabbits = rabbits.filter((rabbit) => rabbit.status === rabbitFilter);
+
+    $("rabbitGrid").innerHTML = rabbits.length
+      ? rabbits.map((rabbit) => {
+          const mother = state.rabbits.find((item) => item.id === rabbit.motherId);
+          const pregnancy = state.rabbitPregnancies.find(
+            (item) => item.rabbitId === rabbit.id && item.status === "Activa"
+          );
+          const litter = rabbit.sex === "Hembra" ? activeRabbitLitter(rabbit.id) : null;
+          return `<article class="animal-card">
+            <div class="animal-head">
+              <div>
+                <h3>🐇 ${escapeHTML(rabbit.name)}</h3>
+                <div class="subtext">${escapeHTML(rabbit.sex || "Hembra")} · ${ageText(rabbit.birth, rabbit.birthPrecision)}</div>
+              </div>
+              <button class="more-button" type="button" data-edit-rabbit="${rabbit.id}">•••</button>
+            </div>
+            <div class="tags">
+              <span class="tag ${rabbit.status === "Gestante" ? "gold" : rabbit.status === "Baja" ? "gray" : ""}">${escapeHTML(rabbit.status)}</span>
+              <span class="tag gray">${escapeHTML(displayBirth(rabbit))}</span>
+              ${mother ? `<span class="tag blue">Hija de ${escapeHTML(mother.name)}</span>` : ""}
+              ${litter ? `<span class="tag gold">${Number(litter.alive || 0)} cría${Number(litter.alive || 0) === 1 ? "" : "s"} con ella</span>` : ""}
+            </div>
+            ${pregnancy ? `<div class="days-left ${rabbitDaysLeft(pregnancy) < 0 ? "late" : rabbitDaysLeft(pregnancy) === 0 ? "today" : ""}" style="width:100%;margin-bottom:12px">
+              <b>${rabbitDaysLeft(pregnancy) === 0 ? "Hoy" : Math.abs(rabbitDaysLeft(pregnancy))}</b>
+              ${rabbitDaysLeft(pregnancy) < 0 ? "días de retraso" : rabbitDaysLeft(pregnancy) === 0 ? "parto previsto" : rabbitDaysLeft(pregnancy) === 1 ? "día para el parto" : "días para el parto"}
+            </div>` : ""}
+            <div class="animal-foot">
+              <span class="subtext">${escapeHTML(rabbit.notes || (litter ? `Camada del ${formatDate(litter.date)}` : "Sin notas"))}</span>
+              ${rabbit.sex === "Hembra" && rabbit.status !== "Baja"
+                ? `<button class="text-button" type="button" data-new-rabbit-pregnancy="${rabbit.id}">Cubrición</button>`
+                : ""}
+            </div>
+          </article>`;
+        }).join("")
+      : `<div class="empty" style="grid-column:1/-1">No hay conejos en este apartado.</div>`;
+
+    const active = state.rabbitPregnancies
+      .filter((pregnancy) => pregnancy.status === "Activa")
+      .sort((a, b) => rabbitDueDate(a).localeCompare(rabbitDueDate(b)));
+    $("rabbitPregnancyList").innerHTML = active.length
+      ? active.map((pregnancy) => rabbitCountdownMarkup(pregnancy)).join("")
+      : `<div class="empty">No hay cubriciones activas.</div>`;
+
+    const litters = state.rabbitLitters
+      .filter((litter) => litter.status === "Con madre")
+      .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+    $("rabbitLitterList").innerHTML = litters.length
+      ? litters.map((litter) => {
+          const mother = state.rabbits.find((item) => item.id === litter.motherId);
+          const father = state.rabbits.find((item) => item.id === litter.fatherId);
+          return `<div class="litter-card">
+            <div class="pregnancy-top">
+              <div>
+                <strong>🐇 ${escapeHTML(mother?.name || "Coneja")} · ${Number(litter.alive || 0)} cría${Number(litter.alive || 0) === 1 ? "" : "s"}</strong>
+                <small>Parto: ${formatDate(litter.date)} · Nacidas: ${Number(litter.born || 0)} · Vivas: ${Number(litter.alive || 0)}${father ? ` · Padre: ${escapeHTML(father.name)}` : ""}</small>
+                ${litter.notes ? `<small>${escapeHTML(litter.notes)}</small>` : ""}
+              </div>
+            </div>
+            <div class="row-actions" style="margin-top:12px">
+              <button type="button" data-edit-rabbit-litter="${litter.id}">Editar</button>
+              <button type="button" data-wean-rabbit-litter="${litter.id}">Marcar destetadas</button>
+            </div>
+          </div>`;
+        }).join("")
+      : `<div class="empty">No hay camadas actualmente con la madre.</div>`;
+  }
+
   function renderAll() {
     renderSyncStatus();
     renderHome();
     renderGoats();
+    renderRabbits();
     renderCalendar();
     renderHens();
     renderFeed();
@@ -782,15 +966,23 @@ button{cursor:pointer}.hidden{display:none!important}
 
   function renderHome() {
     $("metricGoats").textContent = state.goats.filter((goat) => goat.status !== "Baja").length;
+    $("metricRabbits").textContent = state.rabbits.filter((rabbit) => rabbit.status !== "Baja").length;
     $("metricHens").textContent = activeHenCount();
     $("metricEggs").textContent = eggsToday();
 
-    const pregnancies = state.pregnancies
-      .filter((pregnancy) => pregnancy.status === "Activa")
-      .sort((a, b) => dueDate(a).localeCompare(dueDate(b)));
+    const pregnancies = [
+      ...state.pregnancies
+        .filter((pregnancy) => pregnancy.status === "Activa")
+        .map((pregnancy) => ({ type: "goat", pregnancy, due: dueDate(pregnancy) })),
+      ...state.rabbitPregnancies
+        .filter((pregnancy) => pregnancy.status === "Activa")
+        .map((pregnancy) => ({ type: "rabbit", pregnancy, due: rabbitDueDate(pregnancy) }))
+    ].sort((a, b) => a.due.localeCompare(b.due));
 
     $("homePregnancies").innerHTML = pregnancies.length
-      ? pregnancies.slice(0, 4).map((pregnancy) => countdownMarkup(pregnancy, true)).join("")
+      ? pregnancies.slice(0, 6).map((item) => item.type === "goat"
+          ? countdownMarkup(item.pregnancy, true)
+          : rabbitCountdownMarkup(item.pregnancy, true)).join("")
       : `<div class="empty">No hay gestaciones activas.</div>`;
 
     $("homeActivity").innerHTML = state.activity.length
@@ -800,7 +992,8 @@ button{cursor:pointer}.hidden{display:none!important}
 
   function renderGoats() {
     let goats = [...state.goats];
-    if (goatFilter !== "Todas") goats = goats.filter((goat) => goat.status === goatFilter);
+    if (goatFilter === "Actuales") goats = goats.filter((goat) => goat.status !== "Baja");
+    else goats = goats.filter((goat) => goat.status === goatFilter);
 
     $("goatGrid").innerHTML = goats.length
       ? goats.map((goat) => {
@@ -867,6 +1060,38 @@ button{cursor:pointer}.hidden{display:none!important}
       }
     }
 
+
+    for (const pregnancy of state.rabbitPregnancies) {
+      const rabbit = state.rabbits.find((item) => item.id === pregnancy.rabbitId);
+      const male = state.rabbits.find((item) => item.id === pregnancy.maleId);
+      if (pregnancy.mating === date) {
+        events.push({
+          icon: "🐇",
+          title: `Cubrición de ${rabbit?.name || "una coneja"}`,
+          detail: male ? `Macho: ${male.name}` : "Cubrición registrada",
+          type: "rabbit-pregnancy"
+        });
+      }
+      if (pregnancy.status === "Activa" && rabbitDueDate(pregnancy) === date) {
+        events.push({
+          icon: "🐇",
+          title: `Parto estimado de ${rabbit?.name || "una coneja"}`,
+          detail: `${pregnancy.days || 31} días de gestación estimados`,
+          type: "rabbit-due"
+        });
+      }
+    }
+
+    for (const litter of state.rabbitLitters.filter((item) => item.date === date)) {
+      const mother = state.rabbits.find((item) => item.id === litter.motherId);
+      events.push({
+        icon: "🐇",
+        title: `Parto de ${mother?.name || "una coneja"}`,
+        detail: `${litter.born} nacidas · ${litter.alive} vivas`,
+        type: "rabbit-litter"
+      });
+    }
+
     for (const birth of state.births.filter((item) => item.date === date)) {
       const mother = state.goats.find((item) => item.id === birth.motherId);
       events.push({
@@ -902,6 +1127,15 @@ button{cursor:pointer}.hidden{display:none!important}
         title: `Nacimiento de ${goat.name}`,
         detail: goat.birthPrecision === "exact" ? "Fecha exacta" : "Fecha aproximada",
         type: "animal-birth"
+      });
+    }
+
+    for (const rabbit of state.rabbits.filter((item) => item.birth === date)) {
+      events.push({
+        icon: "🐇",
+        title: `Nacimiento de ${rabbit.name}`,
+        detail: rabbit.birthPrecision === "exact" ? "Fecha exacta" : "Fecha aproximada",
+        type: "rabbit-birth"
       });
     }
 
@@ -1030,7 +1264,7 @@ button{cursor:pointer}.hidden{display:none!important}
 
     $("feedList").innerHTML = state.feed.length
       ? [...state.feed].sort((a, b) => b.date.localeCompare(a.date)).map((item) => `<div class="feed-row">
-          <div class="feed-icon">${item.animal === "Cabras" ? "🐐" : item.animal === "Gallinas" ? "🐔" : "🌾"}</div>
+          <div class="feed-icon">${item.animal === "Cabras" ? "🐐" : item.animal === "Conejos" ? "🐇" : item.animal === "Gallinas" ? "🐔" : "🌾"}</div>
           <div>
             <strong>${escapeHTML(item.product)}</strong>
             <small>${formatDate(item.date)} · ${escapeHTML(item.animal)} · ${Number(item.kg).toLocaleString("es-ES", { maximumFractionDigits: 2 })} kg · ${escapeHTML(item.type)}</small>
@@ -1048,10 +1282,14 @@ button{cursor:pointer}.hidden{display:none!important}
         </div>`).join("")
       : `<div class="empty">No hay hechos históricos.</div>`;
 
-    $("currentAnimals").innerHTML = state.goats
-      .filter((goat) => goat.status !== "Baja")
-      .map((goat) => `<span class="name-chip">${goat.sex === "Macho" ? "♂" : "♀"} ${escapeHTML(goat.name)}</span>`)
-      .join("") || `<span class="subtext">Sin animales.</span>`;
+    $("currentAnimals").innerHTML = [
+      ...state.goats
+        .filter((goat) => goat.status !== "Baja")
+        .map((goat) => `<span class="name-chip">🐐 ${goat.sex === "Macho" ? "♂" : "♀"} ${escapeHTML(goat.name)}</span>`),
+      ...state.rabbits
+        .filter((rabbit) => rabbit.status !== "Baja")
+        .map((rabbit) => `<span class="name-chip">🐇 ${rabbit.sex === "Macho" ? "♂" : "♀"} ${escapeHTML(rabbit.name)}</span>`)
+    ].join("") || `<span class="subtext">Sin animales.</span>`;
 
     $("archivedAnimals").innerHTML = state.archivedAnimals
       .map((animal) => `<span class="name-chip archived" title="${escapeHTML(animal.note || "")}">${escapeHTML(animal.name)}</span>`)
@@ -1101,11 +1339,14 @@ button{cursor:pointer}.hidden{display:none!important}
 
   function openActionMenu() {
     openSheet("¿Qué quieres anotar?", `<div class="action-menu">
-      <button class="action-option" type="button" data-sheet-action="goat"><b>🐐</b><strong>Nuevo animal</strong><span>Cabra o macho</span></button>
+      <button class="action-option" type="button" data-sheet-action="goat"><b>🐐</b><strong>Nueva cabra</strong><span>Hembra o macho</span></button>
+      <button class="action-option" type="button" data-sheet-action="rabbit"><b>🐇</b><strong>Nuevo conejo</strong><span>Madre, macho o futura reproductora</span></button>
       <button class="action-option" type="button" data-sheet-action="hen"><b>🐔</b><strong>Grupo de gallinas</strong><span>Cantidad y anilla</span></button>
       <button class="action-option" type="button" data-sheet-action="egg"><b>🥚</b><strong>Huevos</strong><span>Recogida diaria</span></button>
-      <button class="action-option" type="button" data-sheet-action="pregnancy"><b>📅</b><strong>Cubrición</strong><span>Calendario de parto</span></button>
-      <button class="action-option" type="button" data-sheet-action="birth"><b>🍼</b><strong>Parto</strong><span>Registrar crías</span></button>
+      <button class="action-option" type="button" data-sheet-action="pregnancy"><b>📅</b><strong>Cubrición cabra</strong><span>Calendario de parto</span></button>
+      <button class="action-option" type="button" data-sheet-action="rabbit-pregnancy"><b>🐇</b><strong>Cubrición coneja</strong><span>Fecha y parto estimado</span></button>
+      <button class="action-option" type="button" data-sheet-action="birth"><b>🍼</b><strong>Parto cabra</strong><span>Registrar crías</span></button>
+      <button class="action-option" type="button" data-sheet-action="rabbit-litter"><b>🐇</b><strong>Parto coneja</strong><span>Registrar camada</span></button>
       <button class="action-option" type="button" data-sheet-action="feed"><b>🌾</b><strong>Pienso</strong><span>Kilos y coste</span></button>
       <button class="action-option" type="button" data-sheet-action="calendar"><b>🔔</b><strong>Evento</strong><span>Vacuna o recordatorio</span></button>
       <button class="action-option" type="button" data-sheet-action="history"><b>⌛</b><strong>Historial</strong><span>Añadir un hecho</span></button>
@@ -1185,6 +1426,204 @@ button{cursor:pointer}.hidden{display:none!important}
         commit(["goats", "pregnancies", "activity"], "Animal eliminado");
       });
     }
+  }
+
+
+  function rabbitFemaleOptions(selected = "") {
+    return state.rabbits
+      .filter((rabbit) => rabbit.sex === "Hembra" && rabbit.status !== "Baja")
+      .map((rabbit) => `<option value="${rabbit.id}" ${rabbit.id === selected ? "selected" : ""}>${escapeHTML(rabbit.name)}</option>`)
+      .join("");
+  }
+
+  function rabbitMaleOptions(selected = "", allowEmpty = true) {
+    const options = state.rabbits
+      .filter((rabbit) => rabbit.sex === "Macho" && rabbit.status !== "Baja")
+      .map((rabbit) => `<option value="${rabbit.id}" ${rabbit.id === selected ? "selected" : ""}>${escapeHTML(rabbit.name)}</option>`)
+      .join("");
+    return `${allowEmpty ? '<option value="">Sin indicar</option>' : ""}${options}`;
+  }
+
+  function rabbitMotherOptions(selected = "", editingId = "") {
+    return `<option value="">Sin indicar</option>` + state.rabbits
+      .filter((rabbit) => rabbit.sex === "Hembra" && rabbit.id !== editingId)
+      .map((rabbit) => `<option value="${rabbit.id}" ${rabbit.id === selected ? "selected" : ""}>${escapeHTML(rabbit.name)}</option>`)
+      .join("");
+  }
+
+  function openRabbitForm(id = "") {
+    const rabbit = state.rabbits.find((item) => item.id === id) || {};
+    openSheet(id ? "Editar conejo" : "Nuevo conejo", `<form id="rabbitForm">
+      <div class="form-grid">
+        <div class="field"><label for="rabbitName">Nombre o identificación</label><input id="rabbitName" required value="${escapeHTML(rabbit.name || "")}"></div>
+        <div class="field"><label for="rabbitSex">Sexo</label><select id="rabbitSex"><option ${rabbit.sex === "Hembra" ? "selected" : ""}>Hembra</option><option ${rabbit.sex === "Macho" ? "selected" : ""}>Macho</option></select></div>
+        <div class="field"><label for="rabbitBirth">Fecha de nacimiento</label><input id="rabbitBirth" type="date" value="${rabbit.birth || ""}"></div>
+        <div class="field"><label for="rabbitPrecision">Exactitud</label><select id="rabbitPrecision">
+          <option value="exact" ${rabbit.birthPrecision === "exact" ? "selected" : ""}>Exacta</option>
+          <option value="approx" ${rabbit.birthPrecision === "approx" ? "selected" : ""}>Aproximada</option>
+          <option value="month" ${rabbit.birthPrecision === "month" ? "selected" : ""}>Solo el mes</option>
+          <option value="unknown" ${rabbit.birthPrecision === "unknown" ? "selected" : ""}>Desconocida</option>
+        </select></div>
+        <div class="field"><label for="rabbitStatus">Estado</label><select id="rabbitStatus">${["Activo", "Gestante", "Con crías", "Baja"].map((value) => `<option ${rabbit.status === value ? "selected" : ""}>${value}</option>`).join("")}</select></div>
+        <div class="field"><label for="rabbitMother">Madre</label><select id="rabbitMother">${rabbitMotherOptions(rabbit.motherId || "", id)}</select></div>
+        <div class="field full"><label for="rabbitNotes">Notas</label><textarea id="rabbitNotes" placeholder="Raza, color, jaula, tatuaje...">${escapeHTML(rabbit.notes || "")}</textarea></div>
+      </div>
+      <button class="primary-button" type="submit">Guardar conejo</button>
+      ${id ? `<button class="secondary-button danger-text" id="deleteRabbitButton" type="button">Eliminar conejo</button>` : ""}
+    </form>`);
+
+    $("rabbitForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const item = {
+        id: id || uid("rabbit"),
+        name: $("rabbitName").value.trim(),
+        sex: $("rabbitSex").value,
+        birth: $("rabbitBirth").value,
+        birthPrecision: $("rabbitPrecision").value,
+        motherId: $("rabbitMother").value,
+        status: $("rabbitStatus").value,
+        notes: $("rabbitNotes").value.trim()
+      };
+      state.rabbits = id
+        ? state.rabbits.map((existing) => existing.id === id ? item : existing)
+        : [...state.rabbits, item];
+      addActivity("🐇", `${id ? "Ficha de conejo actualizada" : "Nuevo conejo"}: ${item.name}`);
+      closeSheet();
+      commit(["rabbits", "activity"], "Conejo guardado");
+    });
+
+    if (id) {
+      $("deleteRabbitButton").addEventListener("click", () => {
+        if (!confirm(`¿Eliminar a ${rabbit.name}?`)) return;
+        state.rabbits = state.rabbits.filter((item) => item.id !== id);
+        state.rabbitPregnancies = state.rabbitPregnancies.filter((item) => item.rabbitId !== id && item.maleId !== id);
+        state.rabbitLitters = state.rabbitLitters.filter((item) => item.motherId !== id && item.fatherId !== id);
+        state.rabbits.forEach((item) => { if (item.motherId === id) item.motherId = ""; });
+        addActivity("🗑️", `Conejo eliminado: ${rabbit.name}`);
+        closeSheet();
+        commit(["rabbits", "rabbitPregnancies", "rabbitLitters", "activity"], "Conejo eliminado");
+      });
+    }
+  }
+
+  function openRabbitPregnancyForm(id = "", selectedRabbit = "") {
+    if (!state.rabbits.some((rabbit) => rabbit.sex === "Hembra" && rabbit.status !== "Baja")) {
+      toast("Primero añade una coneja");
+      return;
+    }
+    const pregnancy = state.rabbitPregnancies.find((item) => item.id === id) || {};
+    const selected = selectedRabbit || pregnancy.rabbitId || "";
+    openSheet(id ? "Editar cubrición de coneja" : "Registrar cubrición de coneja", `<form id="rabbitPregnancyForm">
+      <div class="form-grid">
+        <div class="field full"><label for="rabbitPregnancyFemale">Coneja</label><select id="rabbitPregnancyFemale">${rabbitFemaleOptions(selected)}</select></div>
+        <div class="field"><label for="rabbitMatingDate">Fecha de cubrición</label><input id="rabbitMatingDate" type="date" required value="${pregnancy.mating || todayISO()}"></div>
+        <div class="field"><label for="rabbitGestationDays">Días de gestación</label><input id="rabbitGestationDays" type="number" min="28" max="35" value="${pregnancy.days || 31}"></div>
+        <div class="field full"><label for="rabbitPregnancyMale">Macho</label><select id="rabbitPregnancyMale">${rabbitMaleOptions(pregnancy.maleId || "")}</select></div>
+        <div class="field full"><label for="rabbitPregnancyNotes">Notas</label><textarea id="rabbitPregnancyNotes">${escapeHTML(pregnancy.notes || "")}</textarea></div>
+      </div>
+      <button class="primary-button" type="submit">Calcular y guardar parto</button>
+    </form>`);
+
+    $("rabbitPregnancyForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const item = {
+        id: id || uid("rabbitpregnancy"),
+        rabbitId: $("rabbitPregnancyFemale").value,
+        mating: $("rabbitMatingDate").value,
+        days: Number($("rabbitGestationDays").value || 31),
+        maleId: $("rabbitPregnancyMale").value,
+        notes: $("rabbitPregnancyNotes").value.trim(),
+        status: "Activa"
+      };
+      state.rabbitPregnancies = id
+        ? state.rabbitPregnancies.map((existing) => existing.id === id ? item : existing)
+        : [...state.rabbitPregnancies, item];
+      const rabbit = state.rabbits.find((candidate) => candidate.id === item.rabbitId);
+      if (rabbit) rabbit.status = "Gestante";
+      selectedCalendarDate = rabbitDueDate(item);
+      calendarCursor = firstDayOfMonth(parseLocalDate(selectedCalendarDate));
+      addActivity("🐇", `${id ? "Cubrición de coneja actualizada" : "Cubrición de coneja registrada"}: ${rabbit?.name || "coneja"}; parto estimado ${formatDate(rabbitDueDate(item))}`);
+      closeSheet();
+      commit(["rabbitPregnancies", "rabbits", "activity"], "Cubrición guardada");
+    });
+  }
+
+  function deleteRabbitPregnancy(id) {
+    const pregnancy = state.rabbitPregnancies.find((item) => item.id === id);
+    if (!pregnancy || !confirm("¿Cancelar esta gestación de coneja?")) return;
+    state.rabbitPregnancies = state.rabbitPregnancies.filter((item) => item.id !== id);
+    const rabbit = state.rabbits.find((item) => item.id === pregnancy.rabbitId);
+    if (rabbit && rabbit.status === "Gestante") rabbit.status = activeRabbitLitter(rabbit.id) ? "Con crías" : "Activo";
+    addActivity("🐇", `Gestación de coneja cancelada: ${rabbit?.name || "coneja"}`);
+    commit(["rabbitPregnancies", "rabbits", "activity"], "Gestación cancelada");
+  }
+
+  function openRabbitLitterForm(id = "", selectedMother = "") {
+    if (!state.rabbits.some((rabbit) => rabbit.sex === "Hembra" && rabbit.status !== "Baja")) {
+      toast("Primero añade una coneja");
+      return;
+    }
+    const litter = state.rabbitLitters.find((item) => item.id === id) || {};
+    const motherId = selectedMother || litter.motherId || "";
+    const activePregnancy = state.rabbitPregnancies.find((item) => item.rabbitId === motherId && item.status === "Activa");
+    openSheet(id ? "Editar camada" : "Registrar parto de coneja", `<form id="rabbitLitterForm">
+      <div class="form-grid">
+        <div class="field full"><label for="rabbitLitterMother">Madre</label><select id="rabbitLitterMother">${rabbitFemaleOptions(motherId)}</select></div>
+        <div class="field"><label for="rabbitLitterDate">Fecha del parto</label><input id="rabbitLitterDate" type="date" value="${litter.date || todayISO()}" required></div>
+        <div class="field"><label for="rabbitLitterBorn">Crías nacidas</label><input id="rabbitLitterBorn" type="number" min="0" value="${litter.born ?? 0}" required></div>
+        <div class="field"><label for="rabbitLitterAlive">Crías vivas</label><input id="rabbitLitterAlive" type="number" min="0" value="${litter.alive ?? 0}" required></div>
+        <div class="field"><label for="rabbitLitterFather">Padre</label><select id="rabbitLitterFather">${rabbitMaleOptions(litter.fatherId || activePregnancy?.maleId || "")}</select></div>
+        <div class="field"><label for="rabbitLitterStatus">Estado</label><select id="rabbitLitterStatus"><option ${litter.status !== "Destetadas" ? "selected" : ""}>Con madre</option><option ${litter.status === "Destetadas" ? "selected" : ""}>Destetadas</option></select></div>
+        <div class="field full"><label for="rabbitLitterNotes">Notas</label><textarea id="rabbitLitterNotes" placeholder="Bajas, colores, incidencias...">${escapeHTML(litter.notes || "")}</textarea></div>
+      </div>
+      <button class="primary-button" type="submit">Guardar camada</button>
+    </form>`);
+
+    $("rabbitLitterForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const motherIdValue = $("rabbitLitterMother").value;
+      const mother = state.rabbits.find((rabbit) => rabbit.id === motherIdValue);
+      const item = {
+        id: id || uid("rabbitlitter"),
+        motherId: motherIdValue,
+        fatherId: $("rabbitLitterFather").value,
+        date: $("rabbitLitterDate").value,
+        born: Number($("rabbitLitterBorn").value || 0),
+        alive: Number($("rabbitLitterAlive").value || 0),
+        status: $("rabbitLitterStatus").value,
+        notes: $("rabbitLitterNotes").value.trim()
+      };
+      state.rabbitLitters = id
+        ? state.rabbitLitters.map((existing) => existing.id === id ? item : existing)
+        : [...state.rabbitLitters, item];
+      state.rabbitPregnancies.forEach((pregnancy) => {
+        if (pregnancy.rabbitId === motherIdValue && pregnancy.status === "Activa") pregnancy.status = "Completada";
+      });
+      if (mother) mother.status = item.status === "Con madre" ? "Con crías" : "Activo";
+      const year = parseLocalDate(item.date).getFullYear();
+      if (!id) {
+        state.historyEvents.push({
+          id: uid("history"), year, title: String(year),
+          text: `${formatDate(item.date)}: ${mother?.name || "Una coneja"} pare ${item.born} cría${item.born === 1 ? "" : "s"}; ${item.alive} viva${item.alive === 1 ? "" : "s"}.`
+        });
+      }
+      addActivity("🐇", `${id ? "Camada actualizada" : "Parto de coneja registrado"}: ${mother?.name || "coneja"} · ${item.alive} crías vivas`);
+      selectedCalendarDate = item.date;
+      calendarCursor = firstDayOfMonth(parseLocalDate(item.date));
+      closeSheet();
+      commit(["rabbitLitters", "rabbitPregnancies", "rabbits", "historyEvents", "activity"], "Camada guardada");
+    });
+  }
+
+  function weanRabbitLitter(id) {
+    const litter = state.rabbitLitters.find((item) => item.id === id);
+    if (!litter || !confirm("¿Marcar esta camada como destetada?")) return;
+    litter.status = "Destetadas";
+    const mother = state.rabbits.find((rabbit) => rabbit.id === litter.motherId);
+    const activePregnancy = state.rabbitPregnancies.some((pregnancy) => pregnancy.rabbitId === litter.motherId && pregnancy.status === "Activa");
+    if (mother && mother.status !== "Baja") mother.status = activePregnancy ? "Gestante" : "Activo";
+    addActivity("🐇", `Camada destetada de ${mother?.name || "una coneja"}: ${litter.alive} crías`);
+    commit(["rabbitLitters", "rabbits", "activity"], "Camada marcada como destetada");
   }
 
   function openHenForm(id = "") {
@@ -1375,7 +1814,7 @@ button{cursor:pointer}.hidden{display:none!important}
     openSheet("Apuntar pienso", `<form id="feedForm">
       <div class="form-grid">
         <div class="field"><label for="feedDate">Fecha</label><input id="feedDate" type="date" value="${todayISO()}" required></div>
-        <div class="field"><label for="feedAnimal">Destino</label><select id="feedAnimal"><option>Cabras</option><option>Gallinas</option><option>Ambos</option></select></div>
+        <div class="field"><label for="feedAnimal">Destino</label><select id="feedAnimal"><option>Cabras</option><option>Conejos</option><option>Gallinas</option><option>Todos</option></select></div>
         <div class="field full"><label for="feedProduct">Producto</label><input id="feedProduct" required></div>
         <div class="field"><label for="feedType">Movimiento</label><select id="feedType"><option>Compra</option><option>Consumo</option></select></div>
         <div class="field"><label for="feedKg">Kilos</label><input id="feedKg" type="number" min="0" step=".01" required></div>
@@ -2053,10 +2492,22 @@ button{cursor:pointer}.hidden{display:none!important}
     });
   });
 
+  document.querySelectorAll("#rabbitFilters .filter-chip").forEach((button) => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll("#rabbitFilters .filter-chip").forEach((item) => item.classList.remove("active"));
+      button.classList.add("active");
+      rabbitFilter = button.dataset.filter;
+      renderRabbits();
+    });
+  });
+
   document.querySelectorAll("[data-action]").forEach((button) => {
     button.addEventListener("click", () => {
       const action = button.dataset.action;
       if (action === "goat") openGoatForm();
+      if (action === "rabbit") openRabbitForm();
+      if (action === "rabbit-pregnancy") openRabbitPregnancyForm();
+      if (action === "rabbit-litter") openRabbitLitterForm();
       if (action === "hen") openHenForm();
       if (action === "egg") openEggForm();
       if (action === "pregnancy") openPregnancyForm();
@@ -2077,6 +2528,9 @@ button{cursor:pointer}.hidden{display:none!important}
     if (!actionButton) return;
     const action = actionButton.dataset.sheetAction;
     if (action === "goat") openGoatForm();
+    if (action === "rabbit") openRabbitForm();
+    if (action === "rabbit-pregnancy") openRabbitPregnancyForm();
+    if (action === "rabbit-litter") openRabbitLitterForm();
     if (action === "hen") openHenForm();
     if (action === "egg") openEggForm();
     if (action === "pregnancy") openPregnancyForm();
@@ -2101,6 +2555,28 @@ button{cursor:pointer}.hidden{display:none!important}
 
     const deletePregnancyButton = event.target.closest("[data-delete-pregnancy]");
     if (deletePregnancyButton) deletePregnancy(deletePregnancyButton.dataset.deletePregnancy);
+
+
+    const editRabbit = event.target.closest("[data-edit-rabbit]");
+    if (editRabbit) openRabbitForm(editRabbit.dataset.editRabbit);
+
+    const newRabbitPregnancy = event.target.closest("[data-new-rabbit-pregnancy]");
+    if (newRabbitPregnancy) openRabbitPregnancyForm("", newRabbitPregnancy.dataset.newRabbitPregnancy);
+
+    const editRabbitPregnancy = event.target.closest("[data-edit-rabbit-pregnancy]");
+    if (editRabbitPregnancy) openRabbitPregnancyForm(editRabbitPregnancy.dataset.editRabbitPregnancy);
+
+    const deleteRabbitPregnancyButton = event.target.closest("[data-delete-rabbit-pregnancy]");
+    if (deleteRabbitPregnancyButton) deleteRabbitPregnancy(deleteRabbitPregnancyButton.dataset.deleteRabbitPregnancy);
+
+    const registerRabbitLitter = event.target.closest("[data-register-rabbit-litter]");
+    if (registerRabbitLitter) openRabbitLitterForm("", registerRabbitLitter.dataset.registerRabbitLitter);
+
+    const editRabbitLitter = event.target.closest("[data-edit-rabbit-litter]");
+    if (editRabbitLitter) openRabbitLitterForm(editRabbitLitter.dataset.editRabbitLitter);
+
+    const weanRabbitLitterButton = event.target.closest("[data-wean-rabbit-litter]");
+    if (weanRabbitLitterButton) weanRabbitLitter(weanRabbitLitterButton.dataset.weanRabbitLitter);
 
     const editHen = event.target.closest("[data-edit-hen]");
     if (editHen) openHenForm(editHen.dataset.editHen);
