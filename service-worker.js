@@ -1,4 +1,4 @@
-const CACHE_NAME = "la-granja-de-la-abuela-v11-conejos";
+const CACHE_NAME = "la-granja-de-la-abuela-v12-fechas";
 const APP_FILES = [
   "./",
   "./index.html",
