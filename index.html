@@ -525,11 +525,12 @@ button{cursor:pointer}.hidden{display:none!important}
   let persistentLocalCache, persistentMultipleTabManager;
   let doc, collection, setDoc, getDoc, getDocs, onSnapshot, serverTimestamp;
 
-  const APP_VERSION = 13;
+  const APP_VERSION = 13.1;
   const LOCAL_KEY = "laCuadraPwaStateV9";
   const PENDING_KEY = "laCuadraPendingDocumentsV9";
   const NOTIFICATION_SEEN_KEY = "laGranjaNotificationSeenV13";
   const VAPID_KEY_LOCAL = "laGranjaVapidKeyV13";
+  const VAPID_PUBLIC_KEY = "BHnrAm0dnO004mi3gNYEKgZI8AGMJ2Bp8n0yd8CHIlnr3EQ8mYfrgseV7IQZZh6GVhx2bTbLX2dn1vqe2rUL-0o";
   const APP_PUBLIC_URL = "https://jose123xd21-alt.github.io/La-cuadra/";
   const DOCUMENT_KEYS = [
     "goats", "pregnancies", "rabbits", "rabbitPregnancies", "rabbitLitters",
@@ -782,7 +783,7 @@ button{cursor:pointer}.hidden{display:none!important}
   }
 
   async function registerPushDevice() {
-    const vapidKey = (localStorage.getItem(VAPID_KEY_LOCAL) || "").trim();
+    const vapidKey = VAPID_PUBLIC_KEY || (localStorage.getItem(VAPID_KEY_LOCAL) || "").trim();
     if (!vapidKey) return false;
     if (!firebaseReady || !firebaseApp) {
       try { await initCloud(); } catch {}
@@ -840,8 +841,10 @@ button{cursor:pointer}.hidden{display:none!important}
     setNotificationSettings({ ...current, enabled: true });
     commit(["notificationSettings"], "Avisos activados");
     const pushReady = await registerPushDevice();
-    if (!pushReady && !(localStorage.getItem(VAPID_KEY_LOCAL) || "").trim()) {
-      toast("Avisos locales activados. Falta configurar Web Push para recibirlos con la app cerrada");
+    if (pushReady) {
+      toast("Notificaciones activadas en este dispositivo");
+    } else {
+      toast("Permiso concedido, pero no se pudo registrar este dispositivo para Push");
     }
     await checkDueNotifications();
   }
@@ -2466,7 +2469,7 @@ button{cursor:pointer}.hidden{display:none!important}
       <div class="checkbox-row">
         ${options.map((days) => `<label class="checkbox-pill"><input type="checkbox" name="notifyDay" value="${days}" ${settings.leadDays.includes(days) ? "checked" : ""}> ${days === 0 ? "El mismo día" : days === 1 ? "1 día antes" : `${days} días antes`}</label>`).join("")}
       </div>
-      <div class="field full" style="margin-top:14px"><label for="vapidKeyInput">Clave Web Push de Firebase (opcional por ahora)</label><input id="vapidKeyInput" value="${escapeHTML(localStorage.getItem(VAPID_KEY_LOCAL) || "")}" placeholder="Se usará para avisos push con la app cerrada"></div>
+      <div class="auth-note" style="margin-top:14px"><strong>✓ Web Push configurado.</strong> La clave pública de Firebase ya está incluida en la aplicación.</div>
       <button class="primary-button" type="submit">Guardar configuración</button>
     </form>`);
 
@@ -2474,7 +2477,6 @@ button{cursor:pointer}.hidden{display:none!important}
       event.preventDefault();
       const leadDays = [...document.querySelectorAll('input[name="notifyDay"]:checked')].map((input) => Number(input.value));
       setNotificationSettings({ enabled: true, leadDays: leadDays.length ? leadDays : [0] });
-      localStorage.setItem(VAPID_KEY_LOCAL, $("vapidKeyInput").value.trim());
       closeSheet();
       commit(["notificationSettings"], "Avisos configurados");
       setTimeout(async () => {
