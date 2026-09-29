@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#18392e">
-  <meta name="description" content="Gestión compartida de cabras, gallinas, huevos, pienso y partos.">
+  <meta name="description" content="Gestión compartida de cabras, conejos, gallinas, salud, avisos, partos, ventas y sacrificios.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -118,6 +118,25 @@ button{cursor:pointer}.hidden{display:none!important}
 .stepper{display:flex;align-items:center;gap:12px}.stepper button{width:44px;height:44px;border:0;border-radius:15px;background:var(--green);color:white;font-size:23px}
 .stepper input{width:96px;height:58px;border:2px solid #b7c8b1;border-radius:16px;background:#fffdf8;color:var(--green);font-size:34px;font-weight:900;text-align:center;outline:none}.stepper input:focus{border-color:var(--green);box-shadow:0 0 0 4px #30634f1f}.stepper input::-webkit-outer-spin-button,.stepper input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}.stepper input[type=number]{-moz-appearance:textfield}.gold-button{width:100%;margin-top:12px;border:0;border-radius:15px;padding:13px;background:var(--gold);color:#4b3410;font-weight:950}
 .feed-metrics{margin-bottom:15px}.feed-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;border:1px solid var(--line);background:var(--card);border-radius:19px;padding:15px}
+
+.health-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.health-summary{border:1px solid var(--line);background:var(--card);border-radius:20px;padding:15px}
+.health-summary b{display:block;font-size:23px;letter-spacing:-.03em}
+.health-summary span{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.reminder-row,.exit-row,.health-row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;border:1px solid var(--line);background:var(--card);border-radius:18px;padding:13px}
+.reminder-icon,.exit-icon,.health-icon{width:42px;height:42px;border-radius:14px;background:#edf3ef;display:grid;place-items:center;font-size:21px}
+.reminder-row strong,.exit-row strong,.health-row strong{display:block}
+.reminder-row small,.exit-row small,.health-row small{display:block;color:var(--muted);font-size:12px;margin-top:3px;line-height:1.45}
+.reminder-badge{border-radius:999px;padding:7px 9px;background:#fff0d4;color:#805715;font-weight:900;font-size:11px;white-space:nowrap}
+.reminder-badge.today{background:#e1efe7;color:#285c49}.reminder-badge.late{background:#fae1e1;color:#913b3b}
+.health-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}
+.health-actions button{border:1px solid var(--line);background:white;border-radius:14px;padding:10px 12px;color:var(--green);font-weight:900}
+.notification-panel{border:1px solid #cbe1d3;background:#edf3ef;border-radius:20px;padding:15px;margin-bottom:15px}
+.notification-panel strong{display:block;margin-bottom:5px}.notification-panel p{margin:0;color:#466255;font-size:13px;line-height:1.45}
+.checkbox-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.checkbox-pill{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:white;border-radius:999px;padding:8px 10px;font-size:12px;font-weight:800}
+.small-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.small-actions button{border:1px solid var(--line);background:white;border-radius:11px;padding:7px 9px;color:var(--green);font-weight:850;font-size:12px}
+.small-actions .danger{color:var(--red)}
+@media(max-width:700px){.health-grid{grid-template-columns:1fr}.bottom-nav{grid-template-columns:repeat(7,1fr)}}
 .feed-icon{width:44px;height:44px;border-radius:14px;background:#f2e8d6;display:grid;place-items:center}.feed-row strong,.feed-row small{display:block}.feed-row small{color:var(--muted);margin-top:3px}.money{font-weight:950}
 .empty{text-align:center;color:var(--muted);padding:25px;border:1px dashed var(--line);border-radius:19px;background:#ffffff55}
 .history-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:15px}.spaced-card{margin-top:15px}
@@ -126,7 +145,7 @@ button{cursor:pointer}.hidden{display:none!important}
 .timeline-item:last-child{padding-bottom:0}.timeline-item h3{margin:0 0 6px;font-size:20px}.timeline-item p{margin:0;line-height:1.5;color:#405149}
 .name-chips{display:flex;flex-wrap:wrap;gap:8px}.name-chip{padding:8px 11px;border-radius:999px;background:#edf3ef;color:var(--green-2);font-weight:850;font-size:13px}
 .name-chip.archived{background:#efeeeb;color:#68736e}
-.bottom-nav{position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(720px,calc(100% - 22px));padding:8px;display:grid;grid-template-columns:repeat(6,1fr);background:#fffdf8ee;backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:23px;box-shadow:0 18px 55px #18392e2b;z-index:40}
+.bottom-nav{position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(720px,calc(100% - 22px));padding:8px;display:grid;grid-template-columns:repeat(7,1fr);background:#fffdf8ee;backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:23px;box-shadow:0 18px 55px #18392e2b;z-index:40}
 .bottom-nav button{border:0;background:transparent;border-radius:16px;padding:8px 1px;color:#7a8882;font-size:9px;font-weight:850}.bottom-nav b{display:block;font-size:19px;margin-bottom:3px}.bottom-nav button.active{background:var(--green);color:white}
 .floating-add{position:fixed;right:22px;bottom:101px;width:58px;height:58px;border:0;border-radius:20px;background:var(--gold);font-size:30px;color:#48310f;box-shadow:0 15px 34px #80571544;z-index:35}
 .overlay{position:fixed;inset:0;background:#10211c88;backdrop-filter:blur(3px);display:flex;align-items:flex-end;justify-content:center;padding:12px;z-index:80}
@@ -204,26 +223,6 @@ button{cursor:pointer}.hidden{display:none!important}
     showFatal(reason && reason.message ? reason.message : String(reason || "Error de conexión"));
   });
 
-  // Elimina service workers y cachés antiguos sin borrar los datos de animales.
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.getRegistrations()
-      .then(function (registrations) {
-        return Promise.all(registrations.map(function (registration) {
-          return registration.unregister();
-        }));
-      })
-      .catch(function () {});
-  }
-
-  if ("caches" in window) {
-    caches.keys()
-      .then(function (names) {
-        return Promise.all(names.map(function (name) {
-          return caches.delete(name);
-        }));
-      })
-      .catch(function () {});
-  }
 })();
 </script>
 
@@ -260,6 +259,8 @@ button{cursor:pointer}.hidden{display:none!important}
           <button class="quick-card" data-action="pregnancy" type="button"><i>📅</i><b>Nueva cubrición</b><span>Calcula el parto</span></button>
           <button class="quick-card" data-action="feed" type="button"><i>🌾</i><b>Apuntar pienso</b><span>Kilos y gasto</span></button>
           <button class="quick-card" data-action="birth" type="button"><i>🍼</i><b>Registrar parto</b><span>Nacimientos</span></button>
+          <button class="quick-card" data-action="health" type="button"><i>🩺</i><b>Salud</b><span>Saneamientos y vacunas</span></button>
+          <button class="quick-card" data-action="exit" type="button"><i>🚪</i><b>Salida animal</b><span>Venta o sacrificio</span></button>
         </div>
 
         <div class="section-head">
@@ -369,6 +370,45 @@ button{cursor:pointer}.hidden{display:none!important}
         <div class="stack" id="rabbitLitterList"></div>
       </section>
 
+
+      <section class="view" id="healthView">
+        <div class="page-title">
+          <div><h1>Salud y avisos</h1><p>Saneamientos, vacunas y próximos recordatorios.</p></div>
+          <button class="round-add" data-action="health" type="button">+</button>
+        </div>
+
+        <div class="health-grid">
+          <div class="health-summary"><b id="nextSanitationSummary">—</b><span>próximo saneamiento</span></div>
+          <div class="health-summary"><b id="nextRabbitVaccineSummary">—</b><span>próxima vacuna conejos</span></div>
+          <div class="health-summary"><b id="notificationSummary">Off</b><span>avisos del dispositivo</span></div>
+        </div>
+
+        <div class="notification-panel">
+          <strong>🔔 Avisos</strong>
+          <p id="notificationHelp">La app puede avisarte antes de partos, saneamientos y vacunas. Los avisos locales se comprueban al abrir la app. Para recibirlos aunque la app esté cerrada hay que completar una vez la configuración Web Push de Firebase.</p>
+          <div class="small-actions">
+            <button type="button" id="enableNotificationsButton">Activar avisos en este dispositivo</button>
+            <button type="button" id="notificationSettingsButton">Configurar días</button>
+          </div>
+        </div>
+
+        <div class="health-actions">
+          <button type="button" data-action="sanitation">🩺 Registrar saneamiento</button>
+          <button type="button" data-action="rabbit-vaccine">💉 Registrar vacuna</button>
+          <button type="button" data-action="exit">🚪 Registrar salida</button>
+        </div>
+
+        <div class="section-head">
+          <div><h2>Próximos avisos</h2><p>Partos, saneamientos y vacunas</p></div>
+        </div>
+        <div class="stack" id="reminderList"></div>
+
+        <div class="section-head">
+          <div><h2>Historial sanitario</h2><p>Actuaciones registradas y próxima fecha</p></div>
+        </div>
+        <div class="stack" id="healthHistoryList"></div>
+      </section>
+
       <section class="view" id="hensView">
         <div class="page-title">
           <div><h1>Gallinas</h1><p>Grupos, anillas y producción de huevos.</p></div>
@@ -428,6 +468,10 @@ button{cursor:pointer}.hidden{display:none!important}
               <div class="name-chips" id="archivedAnimals"></div>
             </article>
             <article class="card spaced-card">
+              <div class="section-head compact"><div><h2>Salidas, ventas y sacrificios</h2><p>Registro de los animales que se van</p></div></div>
+              <div class="stack" id="exitHistoryList"></div>
+            </article>
+            <article class="card spaced-card">
               <div class="section-head compact"><div><h2>Actividad compartida</h2></div></div>
               <div id="fullActivity"></div>
             </article>
@@ -443,6 +487,7 @@ button{cursor:pointer}.hidden{display:none!important}
     <button class="active" data-view="homeView" type="button"><b>⌂</b>Hoy</button>
     <button data-view="goatsView" type="button"><b>🐐</b>Cabras</button>
     <button data-view="rabbitsView" type="button"><b>🐇</b>Conejos</button>
+    <button data-view="healthView" type="button"><b>🩺</b>Salud</button>
     <button data-view="hensView" type="button"><b>🐔</b>Gallinas</button>
     <button data-view="feedView" type="button"><b>🌾</b>Pienso</button>
     <button data-view="historyView" type="button"><b>⌛</b>Historial</button>
@@ -480,13 +525,17 @@ button{cursor:pointer}.hidden{display:none!important}
   let persistentLocalCache, persistentMultipleTabManager;
   let doc, collection, setDoc, getDoc, getDocs, onSnapshot, serverTimestamp;
 
-  const APP_VERSION = 12;
+  const APP_VERSION = 13;
   const LOCAL_KEY = "laCuadraPwaStateV9";
   const PENDING_KEY = "laCuadraPendingDocumentsV9";
+  const NOTIFICATION_SEEN_KEY = "laGranjaNotificationSeenV13";
+  const VAPID_KEY_LOCAL = "laGranjaVapidKeyV13";
+  const APP_PUBLIC_URL = "https://jose123xd21-alt.github.io/La-cuadra/";
   const DOCUMENT_KEYS = [
     "goats", "pregnancies", "rabbits", "rabbitPregnancies", "rabbitLitters",
     "hens", "eggs", "feed", "births",
-    "historyEvents", "archivedAnimals", "activity", "calendarEvents"
+    "historyEvents", "archivedAnimals", "activity", "calendarEvents",
+    "exits", "healthEvents", "notificationSettings", "notificationDevices"
   ];
 
   const blankState = () => ({
@@ -503,7 +552,11 @@ button{cursor:pointer}.hidden{display:none!important}
     historyEvents: [],
     archivedAnimals: [],
     activity: [],
-    calendarEvents: []
+    calendarEvents: [],
+    exits: [],
+    healthEvents: [],
+    notificationSettings: [],
+    notificationDevices: []
   });
 
   const $ = (id) => document.getElementById(id);
@@ -572,6 +625,248 @@ button{cursor:pointer}.hidden{display:none!important}
     const start = dateNumber(from);
     const end = dateNumber(to);
     return Number.isFinite(start) && Number.isFinite(end) ? end - start : Number.NaN;
+  }
+
+  function notificationSettings() {
+    const saved = state.notificationSettings.find((item) => item.id === "settings");
+    return saved || { id: "settings", enabled: true, leadDays: [7, 3, 1, 0] };
+  }
+
+  function setNotificationSettings(next) {
+    state.notificationSettings = [
+      ...state.notificationSettings.filter((item) => item.id !== "settings"),
+      { id: "settings", enabled: Boolean(next.enabled), leadDays: [...new Set(next.leadDays.map(Number))].filter((n) => Number.isFinite(n) && n >= 0).sort((a, b) => b - a) }
+    ];
+  }
+
+  function targetLabel(event) {
+    if (!event) return "";
+    if (event.targetType === "all-goats") return "Todo el rebaño de cabras";
+    if (event.targetType === "all-rabbits") return "Todos los conejos";
+    if (event.targetType === "goat") return state.goats.find((item) => item.id === event.targetId)?.name || event.targetName || "Cabra";
+    if (event.targetType === "rabbit") return state.rabbits.find((item) => item.id === event.targetId)?.name || event.targetName || "Conejo";
+    if (event.targetType === "litter") {
+      const litter = state.rabbitLitters.find((item) => item.id === event.targetId);
+      const mother = state.rabbits.find((item) => item.id === litter?.motherId);
+      return `Camada de ${mother?.name || event.targetName || "coneja"}`;
+    }
+    return event.targetName || "Sin indicar";
+  }
+
+  function litterRemaining(litter) {
+    if (!litter) return 0;
+    const value = litter.remaining;
+    return Number.isFinite(Number(value)) ? Number(value) : Number(litter.alive || 0);
+  }
+
+  function nextHealthDate(type) {
+    return state.healthEvents
+      .filter((item) => item.type === type && item.nextDate)
+      .map((item) => item.nextDate)
+      .filter((date) => dateNumber(date) >= dateNumber(todayISO()))
+      .sort()[0] || "";
+  }
+
+  function reminderItems() {
+    const items = [];
+
+    for (const pregnancy of uniqueActiveGoatPregnancies()) {
+      const goat = state.goats.find((item) => item.id === pregnancy.goatId);
+      const date = dueDate(pregnancy);
+      if (date) items.push({
+        id: `goat-birth-${pregnancy.id}`,
+        kind: "Parto cabra",
+        icon: "🐐",
+        title: `Parto de ${goat?.name || "una cabra"}`,
+        date,
+        detail: `Parto estimado · cubrición ${formatDate(pregnancy.mating)}`
+      });
+    }
+
+    for (const pregnancy of uniqueActiveRabbitPregnancies()) {
+      const rabbit = state.rabbits.find((item) => item.id === pregnancy.rabbitId);
+      const date = rabbitDueDate(pregnancy);
+      if (date) items.push({
+        id: `rabbit-birth-${pregnancy.id}`,
+        kind: "Parto coneja",
+        icon: "🐇",
+        title: `Parto de ${rabbit?.name || "una coneja"}`,
+        date,
+        detail: `Parto estimado · cubrición ${formatDate(pregnancy.mating)}`
+      });
+    }
+
+    for (const event of state.healthEvents) {
+      if (!event.nextDate) continue;
+      items.push({
+        id: `health-${event.id}`,
+        kind: event.type,
+        icon: event.type === "Saneamiento" ? "🩺" : "💉",
+        title: event.type === "Saneamiento"
+          ? `Saneamiento · ${targetLabel(event)}`
+          : `${event.name || "Vacuna"} · ${targetLabel(event)}`,
+        date: event.nextDate,
+        detail: event.type === "Saneamiento" ? "Próximo saneamiento" : "Próxima vacuna"
+      });
+    }
+
+    return items.sort((a, b) => a.date.localeCompare(b.date));
+  }
+
+  function reminderBadge(date) {
+    const left = daysBetween(todayISO(), date);
+    if (!Number.isFinite(left)) return { text: "Sin fecha", cls: "" };
+    if (left < 0) return { text: `${Math.abs(left)} d tarde`, cls: "late" };
+    if (left === 0) return { text: "Hoy", cls: "today" };
+    return { text: left === 1 ? "Mañana" : `${left} días`, cls: "" };
+  }
+
+  function loadNotificationSeen() {
+    try {
+      const value = JSON.parse(localStorage.getItem(NOTIFICATION_SEEN_KEY) || "{}");
+      return value && typeof value === "object" ? value : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function persistNotificationSeen(value) {
+    localStorage.setItem(NOTIFICATION_SEEN_KEY, JSON.stringify(value));
+  }
+
+  async function showLocalNotification(item, lead) {
+    if (!("Notification" in window) || Notification.permission !== "granted") return;
+    const leadText = lead === 0 ? "hoy" : lead === 1 ? "mañana" : `en ${lead} días`;
+    const title = item.kind === "Saneamiento" || item.kind === "Vacuna"
+      ? `${item.icon} ${item.kind} ${leadText}`
+      : `${item.icon} ${item.kind} ${leadText}`;
+    const body = `${item.title} · ${formatDate(item.date)}`;
+
+    try {
+      const registration = await navigator.serviceWorker?.ready;
+      if (registration) {
+        await registration.showNotification(title, {
+          body,
+          icon: "./icon-192.png",
+          badge: "./icon-192.png",
+          tag: `lagranja-${item.id}-${item.date}`,
+          data: { url: `${APP_PUBLIC_URL}?view=${item.kind.includes("Parto") ? "homeView" : "healthView"}` }
+        });
+      } else {
+        new Notification(title, { body, icon: "./icon-192.png" });
+      }
+    } catch {
+      try { new Notification(title, { body, icon: "./icon-192.png" }); } catch {}
+    }
+  }
+
+  async function checkDueNotifications() {
+    const settings = notificationSettings();
+    if (!settings.enabled || !("Notification" in window) || Notification.permission !== "granted") return;
+
+    const seen = loadNotificationSeen();
+    const today = todayISO();
+    for (const item of reminderItems()) {
+      const lead = daysBetween(today, item.date);
+      if (!settings.leadDays.includes(lead)) continue;
+      const key = `${today}|${item.id}|${lead}`;
+      if (seen[key]) continue;
+      await showLocalNotification(item, lead);
+      seen[key] = true;
+    }
+
+    // Mantener solo unas semanas de claves locales.
+    const kept = {};
+    Object.entries(seen).slice(-250).forEach(([key, value]) => { kept[key] = value; });
+    persistNotificationSeen(kept);
+  }
+
+  async function registerPushDevice() {
+    const vapidKey = (localStorage.getItem(VAPID_KEY_LOCAL) || "").trim();
+    if (!vapidKey) return false;
+    if (!firebaseReady || !firebaseApp) {
+      try { await initCloud(); } catch {}
+    }
+    if (!firebaseReady || !firebaseApp) return false;
+
+    try {
+      const messagingSdk = await import(`https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-messaging.js`);
+      if (messagingSdk.isSupported && !(await messagingSdk.isSupported())) return false;
+
+      const registration = await navigator.serviceWorker.ready;
+      const messaging = messagingSdk.getMessaging(firebaseApp);
+      const token = await messagingSdk.getToken(messaging, {
+        vapidKey,
+        serviceWorkerRegistration: registration
+      });
+      if (!token) return false;
+
+      const device = {
+        id: `${currentSession?.user?.id || "local"}-${token.slice(-18)}`,
+        token,
+        userId: currentSession?.user?.id || "",
+        email: currentSession?.user?.email || "",
+        updatedAt: new Date().toISOString(),
+        platform: navigator.userAgentData?.platform || navigator.platform || ""
+      };
+
+      state.notificationDevices = [
+        ...state.notificationDevices.filter((item) => item.token !== token),
+        device
+      ];
+      commit(["notificationDevices"], "Notificaciones push preparadas");
+      return true;
+    } catch (error) {
+      console.error("No se pudo registrar Push:", error);
+      toast(`Avisos locales activos; Push pendiente: ${error.message}`);
+      return false;
+    }
+  }
+
+  async function requestNotificationPermission() {
+    if (!("Notification" in window)) {
+      toast("Este dispositivo no admite notificaciones web");
+      return;
+    }
+
+    const permission = await Notification.requestPermission();
+    if (permission !== "granted") {
+      toast("Permiso de notificaciones no concedido");
+      renderHealth();
+      return;
+    }
+
+    const current = notificationSettings();
+    setNotificationSettings({ ...current, enabled: true });
+    commit(["notificationSettings"], "Avisos activados");
+    const pushReady = await registerPushDevice();
+    if (!pushReady && !(localStorage.getItem(VAPID_KEY_LOCAL) || "").trim()) {
+      toast("Avisos locales activados. Falta configurar Web Push para recibirlos con la app cerrada");
+    }
+    await checkDueNotifications();
+  }
+
+  function goatExitOptions(selected = "") {
+    return state.goats
+      .filter((goat) => goat.status !== "Baja")
+      .map((goat) => `<option value="${goat.id}" ${goat.id === selected ? "selected" : ""}>${escapeHTML(goat.name)}</option>`)
+      .join("");
+  }
+
+  function rabbitExitOptions(selected = "") {
+    return state.rabbits
+      .filter((rabbit) => rabbit.status !== "Baja")
+      .map((rabbit) => `<option value="${rabbit.id}" ${rabbit.id === selected ? "selected" : ""}>${escapeHTML(rabbit.name)}</option>`)
+      .join("");
+  }
+
+  function litterExitOptions(selected = "") {
+    return state.rabbitLitters
+      .filter((litter) => litterRemaining(litter) > 0)
+      .map((litter) => {
+        const mother = state.rabbits.find((item) => item.id === litter.motherId);
+        return `<option value="${litter.id}" ${litter.id === selected ? "selected" : ""}>Camada de ${escapeHTML(mother?.name || "coneja")} · ${litterRemaining(litter)} disponibles · ${formatDate(litter.date)}</option>`;
+      }).join("");
   }
 
   function dedupeActiveByAnimal(records, animalKey) {
@@ -1002,7 +1297,7 @@ button{cursor:pointer}.hidden{display:none!important}
               <span class="tag ${rabbit.status === "Gestante" ? "gold" : rabbit.status === "Baja" ? "gray" : ""}">${escapeHTML(rabbit.status)}</span>
               <span class="tag gray">${escapeHTML(displayBirth(rabbit))}</span>
               ${mother ? `<span class="tag blue">Hija de ${escapeHTML(mother.name)}</span>` : ""}
-              ${litter ? `<span class="tag gold">${Number(litter.alive || 0)} cría${Number(litter.alive || 0) === 1 ? "" : "s"} con ella</span>` : ""}
+              ${litter ? `<span class="tag gold">${litterRemaining(litter)} cría${litterRemaining(litter) === 1 ? "" : "s"} con ella</span>` : ""}
             </div>
             ${pregnancy ? `<div class="days-left ${rabbitDaysLeft(pregnancy) < 0 ? "late" : rabbitDaysLeft(pregnancy) === 0 ? "today" : ""}" style="width:100%;margin-bottom:12px">
               <b>${rabbitDaysLeft(pregnancy) === 0 ? "Hoy" : Math.abs(rabbitDaysLeft(pregnancy))}</b>
@@ -1010,6 +1305,7 @@ button{cursor:pointer}.hidden{display:none!important}
             </div>` : ""}
             <div class="animal-foot">
               <span class="subtext">${escapeHTML(rabbit.notes || (litter ? `Camada del ${formatDate(litter.date)}` : "Sin notas"))}</span>
+              ${rabbit.status !== "Baja" ? `<button class="text-button" type="button" data-exit-rabbit="${rabbit.id}">Salida</button>` : ""}
               ${rabbit.sex === "Hembra" && rabbit.status !== "Baja"
                 ? `<button class="text-button" type="button" data-new-rabbit-pregnancy="${rabbit.id}">${pregnancy ? "Editar cubrición" : "Cubrición"}</button>`
                 : ""}
@@ -1025,7 +1321,7 @@ button{cursor:pointer}.hidden{display:none!important}
       : `<div class="empty">No hay cubriciones activas.</div>`;
 
     const litters = state.rabbitLitters
-      .filter((litter) => litter.status === "Con madre")
+      .filter((litter) => litter.status === "Con madre" && litterRemaining(litter) > 0)
       .sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
     $("rabbitLitterList").innerHTML = litters.length
       ? litters.map((litter) => {
@@ -1034,7 +1330,7 @@ button{cursor:pointer}.hidden{display:none!important}
           return `<div class="litter-card">
             <div class="pregnancy-top">
               <div>
-                <strong>🐇 ${escapeHTML(mother?.name || "Coneja")} · ${Number(litter.alive || 0)} cría${Number(litter.alive || 0) === 1 ? "" : "s"}</strong>
+                <strong>🐇 ${escapeHTML(mother?.name || "Coneja")} · ${litterRemaining(litter)} cría${litterRemaining(litter) === 1 ? "" : "s"}</strong>
                 <small>Parto: ${formatDate(litter.date)} · Nacidas: ${Number(litter.born || 0)} · Vivas: ${Number(litter.alive || 0)}${father ? ` · Padre: ${escapeHTML(father.name)}` : ""}</small>
                 ${litter.notes ? `<small>${escapeHTML(litter.notes)}</small>` : ""}
               </div>
@@ -1042,6 +1338,7 @@ button{cursor:pointer}.hidden{display:none!important}
             <div class="row-actions" style="margin-top:12px">
               <button type="button" data-edit-rabbit-litter="${litter.id}">Editar</button>
               <button type="button" data-wean-rabbit-litter="${litter.id}">Marcar destetadas</button>
+              <button type="button" data-exit-litter="${litter.id}">Salida de crías</button>
             </div>
           </div>`;
         }).join("")
@@ -1053,6 +1350,7 @@ button{cursor:pointer}.hidden{display:none!important}
     renderHome();
     renderGoats();
     renderRabbits();
+    renderHealth();
     renderCalendar();
     renderHens();
     renderFeed();
@@ -1114,6 +1412,7 @@ button{cursor:pointer}.hidden{display:none!important}
             </div>` : ""}
             <div class="animal-foot">
               <span class="subtext">${escapeHTML(goat.notes || "Sin notas")}</span>
+              ${goat.status !== "Baja" ? `<button class="text-button" type="button" data-exit-goat="${goat.id}">Salida</button>` : ""}
               ${goat.sex === "Hembra" && goat.status !== "Baja"
                 ? `<button class="text-button" type="button" data-new-pregnancy="${goat.id}">${pregnancy ? "Editar cubrición" : "Cubrición"}</button>`
                 : ""}
@@ -1241,6 +1540,26 @@ button{cursor:pointer}.hidden{display:none!important}
       });
     }
 
+    for (const health of state.healthEvents.filter((item) => item.nextDate === date)) {
+      events.push({
+        icon: health.type === "Saneamiento" ? "🩺" : "💉",
+        title: health.type === "Saneamiento"
+          ? `Saneamiento · ${targetLabel(health)}`
+          : `${health.name || "Vacuna"} · ${targetLabel(health)}`,
+        detail: health.type === "Saneamiento" ? "Próximo saneamiento" : "Próxima vacuna",
+        type: "health"
+      });
+    }
+
+    for (const exit of state.exits.filter((item) => item.date === date)) {
+      events.push({
+        icon: exit.kind === "Venta" ? "💶" : exit.kind === "Sacrificio" ? "🚪" : "📦",
+        title: `${exit.kind}: ${exit.subjectName || "animal"}`,
+        detail: exit.quantity && Number(exit.quantity) > 1 ? `${exit.quantity} animales` : "Salida registrada",
+        type: "exit"
+      });
+    }
+
     for (const event of state.calendarEvents.filter((item) => item.date === date)) {
       events.push({
         icon: eventIcon(event.type),
@@ -1263,6 +1582,55 @@ button{cursor:pointer}.hidden{display:none!important}
       "Compra": "🛒",
       "Otro": "📌"
     }[type] || "📌";
+  }
+
+
+  function renderHealth() {
+    if (!$("reminderList")) return;
+
+    const sanitation = nextHealthDate("Saneamiento");
+    const vaccine = nextHealthDate("Vacuna");
+    $("nextSanitationSummary").textContent = sanitation ? formatDate(sanitation) : "Sin fecha";
+    $("nextRabbitVaccineSummary").textContent = vaccine ? formatDate(vaccine) : "Sin fecha";
+
+    const permission = "Notification" in window ? Notification.permission : "unsupported";
+    const settings = notificationSettings();
+    $("notificationSummary").textContent = permission === "granted" && settings.enabled ? "Activos" : permission === "denied" ? "Bloqueados" : "Sin activar";
+
+    const reminders = reminderItems();
+    $("reminderList").innerHTML = reminders.length
+      ? reminders.slice(0, 20).map((item) => {
+          const badge = reminderBadge(item.date);
+          return `<div class="reminder-row">
+            <div class="reminder-icon">${item.icon}</div>
+            <div>
+              <strong>${escapeHTML(item.title)}</strong>
+              <small>${formatDate(item.date)} · ${escapeHTML(item.detail || "")}</small>
+            </div>
+            <span class="reminder-badge ${badge.cls}">${escapeHTML(badge.text)}</span>
+          </div>`;
+        }).join("")
+      : `<div class="empty">No hay avisos programados.</div>`;
+
+    const health = [...state.healthEvents].sort((a, b) =>
+      String(b.date || b.nextDate || "").localeCompare(String(a.date || a.nextDate || ""))
+    );
+    $("healthHistoryList").innerHTML = health.length
+      ? health.map((item) => `<div class="health-row">
+          <div class="health-icon">${item.type === "Saneamiento" ? "🩺" : "💉"}</div>
+          <div>
+            <strong>${escapeHTML(item.type === "Vacuna" ? (item.name || "Vacuna") : "Saneamiento")}</strong>
+            <small>${escapeHTML(targetLabel(item))}${item.date ? ` · realizado ${formatDate(item.date)}` : ""}${item.nextDate ? ` · próximo ${formatDate(item.nextDate)}` : ""}</small>
+            ${item.notes ? `<small>${escapeHTML(item.notes)}</small>` : ""}
+            <div class="small-actions">
+              <button type="button" data-edit-health="${item.id}">Editar</button>
+              ${item.nextDate ? `<button type="button" data-repeat-health="${item.id}">Marcar realizado</button>` : ""}
+              <button class="danger" type="button" data-delete-health="${item.id}">Eliminar</button>
+            </div>
+          </div>
+          <span class="tag ${item.type === "Vacuna" ? "blue" : "gold"}">${escapeHTML(item.type)}</span>
+        </div>`).join("")
+      : `<div class="empty">Todavía no hay actuaciones sanitarias registradas.</div>`;
   }
 
   function renderCalendar() {
@@ -1384,9 +1752,30 @@ button{cursor:pointer}.hidden{display:none!important}
         .map((rabbit) => `<span class="name-chip">🐇 ${rabbit.sex === "Macho" ? "♂" : "♀"} ${escapeHTML(rabbit.name)}</span>`)
     ].join("") || `<span class="subtext">Sin animales.</span>`;
 
-    $("archivedAnimals").innerHTML = state.archivedAnimals
+    const exitedNames = state.exits
+      .filter((item) => ["goat", "rabbit"].includes(item.subjectType))
+      .map((item) => ({
+        name: item.subjectName,
+        note: `${item.kind} · ${formatDate(item.date)}`
+      }));
+    const archivedCombined = [...state.archivedAnimals, ...exitedNames]
+      .filter((item, index, array) => item?.name && array.findIndex((other) => other.name === item.name) === index);
+
+    $("archivedAnimals").innerHTML = archivedCombined
       .map((animal) => `<span class="name-chip archived" title="${escapeHTML(animal.note || "")}">${escapeHTML(animal.name)}</span>`)
       .join("") || `<span class="subtext">Sin animales archivados.</span>`;
+
+    $("exitHistoryList").innerHTML = state.exits.length
+      ? [...state.exits].sort((a, b) => String(b.date).localeCompare(String(a.date))).map((item) => `<div class="exit-row">
+          <div class="exit-icon">${item.kind === "Venta" ? "💶" : item.kind === "Sacrificio" ? "🚪" : "📦"}</div>
+          <div>
+            <strong>${escapeHTML(item.kind)} · ${escapeHTML(item.subjectName || "Animal")}</strong>
+            <small>${formatDate(item.date)}${Number(item.quantity || 1) > 1 ? ` · ${Number(item.quantity)} animales` : ""}${item.price ? ` · ${euro(item.price)}` : ""}${item.weight ? ` · ${Number(item.weight).toLocaleString("es-ES")} kg` : ""}</small>
+            ${item.notes ? `<small>${escapeHTML(item.notes)}</small>` : ""}
+          </div>
+          <button class="delete-icon" type="button" data-delete-exit="${item.id}" aria-label="Eliminar salida">×</button>
+        </div>`).join("")
+      : `<div class="empty">Todavía no hay salidas registradas.</div>`;
 
     $("fullActivity").innerHTML = state.activity.length
       ? state.activity.map(activityMarkup).join("")
@@ -1441,7 +1830,10 @@ button{cursor:pointer}.hidden{display:none!important}
       <button class="action-option" type="button" data-sheet-action="birth"><b>🍼</b><strong>Parto cabra</strong><span>Registrar crías</span></button>
       <button class="action-option" type="button" data-sheet-action="rabbit-litter"><b>🐇</b><strong>Parto coneja</strong><span>Registrar camada</span></button>
       <button class="action-option" type="button" data-sheet-action="feed"><b>🌾</b><strong>Pienso</strong><span>Kilos y coste</span></button>
-      <button class="action-option" type="button" data-sheet-action="calendar"><b>🔔</b><strong>Evento</strong><span>Vacuna o recordatorio</span></button>
+      <button class="action-option" type="button" data-sheet-action="sanitation"><b>🩺</b><strong>Saneamiento</strong><span>Cabras y próxima fecha</span></button>
+      <button class="action-option" type="button" data-sheet-action="rabbit-vaccine"><b>💉</b><strong>Vacuna conejos</strong><span>Registrar y programar</span></button>
+      <button class="action-option" type="button" data-sheet-action="exit"><b>🚪</b><strong>Salida animal</strong><span>Venta, sacrificio u otra baja</span></button>
+      <button class="action-option" type="button" data-sheet-action="calendar"><b>🔔</b><strong>Evento</strong><span>Recordatorio general</span></button>
       <button class="action-option" type="button" data-sheet-action="history"><b>⌛</b><strong>Historial</strong><span>Añadir un hecho</span></button>
     </div>`);
   }
@@ -1844,6 +2236,252 @@ button{cursor:pointer}.hidden{display:none!important}
         commit(["hens", "eggs", "activity"], "Grupo eliminado");
       });
     }
+  }
+
+
+  function openExitForm(subjectType = "", subjectId = "") {
+    const defaultType = subjectType || (state.goats.some((item) => item.status !== "Baja") ? "goat" : "rabbit");
+
+    openSheet("Registrar salida de animales", `<form id="exitForm">
+      <div class="form-grid">
+        <div class="field"><label for="exitSubjectType">Qué sale</label><select id="exitSubjectType">
+          <option value="goat" ${defaultType === "goat" ? "selected" : ""}>Cabra / choto</option>
+          <option value="rabbit" ${defaultType === "rabbit" ? "selected" : ""}>Conejo reproductor</option>
+          <option value="litter" ${defaultType === "litter" ? "selected" : ""}>Crías de conejo / camada</option>
+        </select></div>
+        <div class="field"><label for="exitKind">Motivo</label><select id="exitKind">
+          <option>Venta</option><option>Sacrificio</option><option>Cesión</option><option>Muerte</option><option>Otro</option>
+        </select></div>
+        <div class="field full"><label for="exitSubject">Animal o camada</label><select id="exitSubject"></select></div>
+        <div class="field"><label for="exitDate">Fecha de salida</label><input id="exitDate" type="date" value="${todayISO()}" required></div>
+        <div class="field" id="exitQuantityField"><label for="exitQuantity">Cantidad</label><input id="exitQuantity" type="number" min="1" value="1" required></div>
+        <div class="field"><label for="exitWeight">Peso total (kg, opcional)</label><input id="exitWeight" type="number" min="0" step="0.01"></div>
+        <div class="field"><label for="exitPrice">Importe total (€ opcional)</label><input id="exitPrice" type="number" min="0" step="0.01"></div>
+        <div class="field full"><label for="exitNotes">Notas</label><textarea id="exitNotes" placeholder="Comprador, destino, observaciones..."></textarea></div>
+      </div>
+      <div class="auth-note">Al registrar la salida de una cabra o conejo reproductor, pasará automáticamente a <strong>Baja</strong> y dejará de aparecer entre los animales actuales. El registro se conservará en Historial.</div>
+      <button class="primary-button" type="submit">Guardar salida</button>
+    </form>`);
+
+    const refreshSubjects = () => {
+      const type = $("exitSubjectType").value;
+      const select = $("exitSubject");
+      const preset = type === defaultType ? subjectId : "";
+      if (type === "goat") select.innerHTML = goatExitOptions(preset);
+      if (type === "rabbit") select.innerHTML = rabbitExitOptions(preset);
+      if (type === "litter") select.innerHTML = litterExitOptions(preset);
+      $("exitQuantityField").classList.toggle("hidden", type !== "litter");
+      if (type !== "litter") $("exitQuantity").value = "1";
+    };
+
+    $("exitSubjectType").addEventListener("change", refreshSubjects);
+    refreshSubjects();
+
+    $("exitForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const type = $("exitSubjectType").value;
+      const id = $("exitSubject").value;
+      const kind = $("exitKind").value;
+      const date = $("exitDate").value;
+      const quantity = Math.max(1, Number($("exitQuantity").value || 1));
+
+      if (!id) {
+        toast("Selecciona el animal o la camada");
+        return;
+      }
+
+      let subjectName = "";
+      let changedKeys = ["exits", "historyEvents", "activity"];
+
+      if (type === "goat") {
+        const goat = state.goats.find((item) => item.id === id);
+        if (!goat) return;
+        subjectName = goat.name;
+        goat.status = "Baja";
+        state.pregnancies.forEach((pregnancy) => {
+          if (pregnancy.goatId === id && pregnancy.status === "Activa") pregnancy.status = "Cancelada";
+        });
+        changedKeys.push("goats", "pregnancies");
+      } else if (type === "rabbit") {
+        const rabbit = state.rabbits.find((item) => item.id === id);
+        if (!rabbit) return;
+        subjectName = rabbit.name;
+        rabbit.status = "Baja";
+        state.rabbitPregnancies.forEach((pregnancy) => {
+          if (pregnancy.rabbitId === id && pregnancy.status === "Activa") pregnancy.status = "Cancelada";
+        });
+        changedKeys.push("rabbits", "rabbitPregnancies");
+      } else {
+        const litter = state.rabbitLitters.find((item) => item.id === id);
+        if (!litter) return;
+        const mother = state.rabbits.find((item) => item.id === litter.motherId);
+        const remaining = litterRemaining(litter);
+        if (quantity > remaining) {
+          toast(`En esa camada quedan ${remaining} crías`);
+          return;
+        }
+        litter.remaining = remaining - quantity;
+        subjectName = `${quantity} cría${quantity === 1 ? "" : "s"} de ${mother?.name || "una coneja"}`;
+        if (litter.remaining <= 0) {
+          litter.status = "Finalizada";
+          if (mother && mother.status === "Con crías" && !activePregnancyForRabbit(mother.id)) mother.status = "Activo";
+          changedKeys.push("rabbits");
+        }
+        changedKeys.push("rabbitLitters");
+      }
+
+      const record = {
+        id: uid("exit"),
+        subjectType: type,
+        subjectId: id,
+        subjectName,
+        kind,
+        date,
+        quantity,
+        weight: Number($("exitWeight").value || 0),
+        price: Number($("exitPrice").value || 0),
+        notes: $("exitNotes").value.trim()
+      };
+      state.exits.push(record);
+
+      const year = parseLocalDate(date)?.getFullYear() || new Date().getFullYear();
+      state.historyEvents.push({
+        id: uid("history"),
+        year,
+        title: String(year),
+        text: `${formatDate(date)}: ${kind.toLowerCase()} de ${subjectName}.`
+      });
+      addActivity(kind === "Venta" ? "💶" : "🚪", `${kind}: ${subjectName}`);
+
+      closeSheet();
+      commit([...new Set(changedKeys)], "Salida registrada");
+    });
+  }
+
+  function healthTargetOptions(type, selected = "") {
+    if (type === "Saneamiento") {
+      return `<option value="all-goats" ${selected === "all-goats" ? "selected" : ""}>Todo el rebaño de cabras</option>` +
+        state.goats.filter((goat) => goat.status !== "Baja")
+          .map((goat) => `<option value="goat:${goat.id}" ${selected === `goat:${goat.id}` ? "selected" : ""}>${escapeHTML(goat.name)}</option>`).join("");
+    }
+
+    return `<option value="all-rabbits" ${selected === "all-rabbits" ? "selected" : ""}>Todos los conejos actuales</option>` +
+      state.rabbits.filter((rabbit) => rabbit.status !== "Baja")
+        .map((rabbit) => `<option value="rabbit:${rabbit.id}" ${selected === `rabbit:${rabbit.id}` ? "selected" : ""}>${escapeHTML(rabbit.name)}</option>`).join("") +
+      state.rabbitLitters.filter((litter) => litterRemaining(litter) > 0)
+        .map((litter) => {
+          const mother = state.rabbits.find((item) => item.id === litter.motherId);
+          return `<option value="litter:${litter.id}" ${selected === `litter:${litter.id}` ? "selected" : ""}>Camada de ${escapeHTML(mother?.name || "coneja")} (${litterRemaining(litter)} crías)</option>`;
+        }).join("");
+  }
+
+  function openHealthForm(forcedType = "", id = "", repeatFromId = "") {
+    const existing = state.healthEvents.find((item) => item.id === id);
+    const repeatFrom = state.healthEvents.find((item) => item.id === repeatFromId);
+    const source = existing || repeatFrom || {};
+    const type = forcedType || source.type || "Saneamiento";
+    const targetValue = source.targetType && source.targetId
+      ? `${source.targetType}:${source.targetId}`
+      : source.targetType || (type === "Saneamiento" ? "all-goats" : "all-rabbits");
+    const isRepeat = Boolean(repeatFrom);
+
+    openSheet(existing ? "Editar actuación sanitaria" : isRepeat ? "Registrar nueva actuación" : "Nueva actuación sanitaria", `<form id="healthForm">
+      <div class="form-grid">
+        <div class="field"><label for="healthType">Tipo</label><select id="healthType">
+          <option ${type === "Saneamiento" ? "selected" : ""}>Saneamiento</option>
+          <option ${type === "Vacuna" ? "selected" : ""}>Vacuna</option>
+        </select></div>
+        <div class="field"><label for="healthDate">Fecha realizada</label><input id="healthDate" type="date" value="${isRepeat ? todayISO() : source.date || todayISO()}"></div>
+        <div class="field full" id="healthNameField"><label for="healthName">Vacuna</label><input id="healthName" placeholder="Ej. Mixomatosis / enfermedad hemorrágica" value="${escapeHTML(source.name || "")}"></div>
+        <div class="field full"><label for="healthTarget">Animal o grupo</label><select id="healthTarget"></select></div>
+        <div class="field full"><label for="healthNextDate">Próxima fecha</label><input id="healthNextDate" type="date" value="${isRepeat ? "" : source.nextDate || ""}" required></div>
+        <div class="field full"><label for="healthNotes">Notas</label><textarea id="healthNotes" placeholder="Veterinario, resultado, lote, observaciones...">${escapeHTML(isRepeat ? "" : source.notes || "")}</textarea></div>
+      </div>
+      <div class="auth-note">La app no decide cada cuánto corresponde una vacuna o saneamiento. Introduce la <strong>próxima fecha indicada por tu veterinario o programa sanitario</strong> y la aplicación se encargará de recordártela.</div>
+      <button class="primary-button" type="submit">${existing ? "Guardar cambios" : "Guardar y programar aviso"}</button>
+    </form>`);
+
+    const refresh = () => {
+      const currentType = $("healthType").value;
+      $("healthNameField").classList.toggle("hidden", currentType !== "Vacuna");
+      $("healthTarget").innerHTML = healthTargetOptions(currentType, targetValue);
+    };
+    $("healthType").addEventListener("change", refresh);
+    refresh();
+
+    $("healthForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const currentType = $("healthType").value;
+      const target = $("healthTarget").value;
+      const [prefix, ...rest] = target.split(":");
+      const targetId = rest.join(":");
+      const targetType = prefix;
+      const name = currentType === "Vacuna" ? $("healthName").value.trim() : "Saneamiento";
+      if (currentType === "Vacuna" && !name) {
+        toast("Escribe el nombre de la vacuna");
+        return;
+      }
+
+      const item = {
+        id: existing?.id || uid("health"),
+        type: currentType,
+        name,
+        targetType,
+        targetId,
+        targetName: "",
+        date: $("healthDate").value,
+        nextDate: $("healthNextDate").value,
+        notes: $("healthNotes").value.trim()
+      };
+
+      state.healthEvents = existing
+        ? state.healthEvents.map((entry) => entry.id === existing.id ? item : entry)
+        : [...state.healthEvents, item];
+
+      addActivity(currentType === "Saneamiento" ? "🩺" : "💉",
+        `${currentType}: ${targetLabel(item)} · próxima fecha ${formatDate(item.nextDate)}`);
+
+      selectedCalendarDate = item.nextDate;
+      calendarCursor = firstDayOfMonth(parseLocalDate(item.nextDate));
+      closeSheet();
+      commit(["healthEvents", "activity"], "Actuación sanitaria guardada");
+      setTimeout(checkDueNotifications, 150);
+    });
+  }
+
+  function deleteHealthEvent(id) {
+    const item = state.healthEvents.find((entry) => entry.id === id);
+    if (!item || !confirm("¿Eliminar este registro sanitario?")) return;
+    state.healthEvents = state.healthEvents.filter((entry) => entry.id !== id);
+    addActivity("🗑️", `${item.type} eliminado`);
+    commit(["healthEvents", "activity"], "Registro eliminado");
+  }
+
+  function openNotificationSettings() {
+    const settings = notificationSettings();
+    const options = [14, 7, 3, 1, 0];
+
+    openSheet("Configurar avisos", `<form id="notificationSettingsForm">
+      <div class="auth-note">Elige con cuánta antelación quieres recibir avisos de <strong>partos, saneamientos y vacunas</strong>.</div>
+      <div class="checkbox-row">
+        ${options.map((days) => `<label class="checkbox-pill"><input type="checkbox" name="notifyDay" value="${days}" ${settings.leadDays.includes(days) ? "checked" : ""}> ${days === 0 ? "El mismo día" : days === 1 ? "1 día antes" : `${days} días antes`}</label>`).join("")}
+      </div>
+      <div class="field full" style="margin-top:14px"><label for="vapidKeyInput">Clave Web Push de Firebase (opcional por ahora)</label><input id="vapidKeyInput" value="${escapeHTML(localStorage.getItem(VAPID_KEY_LOCAL) || "")}" placeholder="Se usará para avisos push con la app cerrada"></div>
+      <button class="primary-button" type="submit">Guardar configuración</button>
+    </form>`);
+
+    $("notificationSettingsForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const leadDays = [...document.querySelectorAll('input[name="notifyDay"]:checked')].map((input) => Number(input.value));
+      setNotificationSettings({ enabled: true, leadDays: leadDays.length ? leadDays : [0] });
+      localStorage.setItem(VAPID_KEY_LOCAL, $("vapidKeyInput").value.trim());
+      closeSheet();
+      commit(["notificationSettings"], "Avisos configurados");
+      setTimeout(async () => {
+        await registerPushDevice();
+        await checkDueNotifications();
+      }, 150);
+    });
   }
 
   function openPregnancyForm(id = "", selectedGoat = "") {
@@ -2769,6 +3407,12 @@ button{cursor:pointer}.hidden{display:none!important}
       if (action === "pregnancy") openPregnancyForm();
       if (action === "birth") openBirthForm();
       if (action === "feed") openFeedForm();
+      if (action === "health") {
+        document.querySelector('[data-view="healthView"]')?.click();
+      }
+      if (action === "sanitation") openHealthForm("Saneamiento");
+      if (action === "rabbit-vaccine") openHealthForm("Vacuna");
+      if (action === "exit") openExitForm();
       if (action === "history") openHistoryForm();
     });
   });
@@ -2792,6 +3436,9 @@ button{cursor:pointer}.hidden{display:none!important}
     if (action === "pregnancy") openPregnancyForm();
     if (action === "birth") openBirthForm();
     if (action === "feed") openFeedForm();
+    if (action === "sanitation") openHealthForm("Saneamiento");
+    if (action === "rabbit-vaccine") openHealthForm("Vacuna");
+    if (action === "exit") openExitForm();
     if (action === "calendar") openCalendarEventForm();
     if (action === "history") openHistoryForm();
   });
@@ -2834,6 +3481,33 @@ button{cursor:pointer}.hidden{display:none!important}
     const weanRabbitLitterButton = event.target.closest("[data-wean-rabbit-litter]");
     if (weanRabbitLitterButton) weanRabbitLitter(weanRabbitLitterButton.dataset.weanRabbitLitter);
 
+    const exitGoatButton = event.target.closest("[data-exit-goat]");
+    if (exitGoatButton) openExitForm("goat", exitGoatButton.dataset.exitGoat);
+
+    const exitRabbitButton = event.target.closest("[data-exit-rabbit]");
+    if (exitRabbitButton) openExitForm("rabbit", exitRabbitButton.dataset.exitRabbit);
+
+    const exitLitterButton = event.target.closest("[data-exit-litter]");
+    if (exitLitterButton) openExitForm("litter", exitLitterButton.dataset.exitLitter);
+
+    const editHealthButton = event.target.closest("[data-edit-health]");
+    if (editHealthButton) openHealthForm("", editHealthButton.dataset.editHealth);
+
+    const repeatHealthButton = event.target.closest("[data-repeat-health]");
+    if (repeatHealthButton) openHealthForm("", "", repeatHealthButton.dataset.repeatHealth);
+
+    const deleteHealthButton = event.target.closest("[data-delete-health]");
+    if (deleteHealthButton) deleteHealthEvent(deleteHealthButton.dataset.deleteHealth);
+
+    const deleteExitButton = event.target.closest("[data-delete-exit]");
+    if (deleteExitButton) {
+      const exitItem = state.exits.find((item) => item.id === deleteExitButton.dataset.deleteExit);
+      if (exitItem && confirm("¿Eliminar solo este registro de salida? El estado del animal no se modificará.")) {
+        state.exits = state.exits.filter((item) => item.id !== exitItem.id);
+        commit(["exits"], "Registro de salida eliminado");
+      }
+    }
+
     const editHen = event.target.closest("[data-edit-hen]");
     if (editHen) openHenForm(editHen.dataset.editHen);
 
@@ -2851,6 +3525,9 @@ button{cursor:pointer}.hidden{display:none!important}
     const deleteEventButton = event.target.closest("[data-delete-calendar-event]");
     if (deleteEventButton) deleteCalendarEvent(deleteEventButton.dataset.deleteCalendarEvent);
   });
+
+  $("enableNotificationsButton").addEventListener("click", requestNotificationPermission);
+  $("notificationSettingsButton").addEventListener("click", openNotificationSettings);
 
   $("calendarPrevious").addEventListener("click", () => {
     calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth() - 1, 1);
@@ -2942,11 +3619,16 @@ button{cursor:pointer}.hidden{display:none!important}
   }, 60000);
 
   handleInitialView();
-  registerServiceWorker();
   renderAll();
+  registerServiceWorker();
   setTimeout(() => {
     initCloud();
+    checkDueNotifications();
   }, 0);
+  setInterval(checkDueNotifications, 60 * 60 * 1000);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") checkDueNotifications();
+  });
 })();
 
 </script>

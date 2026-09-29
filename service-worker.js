@@ -1,4 +1,4 @@
-const CACHE_NAME = "la-granja-de-la-abuela-v12-fechas";
+const CACHE_NAME = "la-granja-de-la-abuela-v13-salud";
 const APP_FILES = [
   "./",
   "./index.html",
@@ -7,6 +7,15 @@ const APP_FILES = [
   "./icon-512.png",
   "./maskable-512.png"
 ];
+
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDtauQRMU2vWS8RI_9TiDr-mZewvkQpxR4",
+  authDomain: "la-granja-de-la-abuela.firebaseapp.com",
+  projectId: "la-granja-de-la-abuela",
+  storageBucket: "la-granja-de-la-abuela.firebasestorage.app",
+  messagingSenderId: "191036578892",
+  appId: "1:191036578892:web:cec8275b54cc52572e28e9"
+};
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -55,3 +64,43 @@ self.addEventListener("fetch", (event) => {
     }))
   );
 });
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const target = event.notification?.data?.url || "./?view=healthView";
+  event.waitUntil(
+    clients.matchAll({ type: "window", includeUncontrolled: true }).then((windows) => {
+      for (const client of windows) {
+        if ("focus" in client) {
+          client.navigate(target);
+          return client.focus();
+        }
+      }
+      return clients.openWindow ? clients.openWindow(target) : undefined;
+    })
+  );
+});
+
+// Firebase Cloud Messaging para avisos cuando la PWA está cerrada.
+// Si aún no se ha configurado Web Push, este bloque no afecta al resto de la app.
+try {
+  importScripts("https://www.gstatic.com/firebasejs/12.11.0/firebase-app-compat.js");
+  importScripts("https://www.gstatic.com/firebasejs/12.11.0/firebase-messaging-compat.js");
+  firebase.initializeApp(FIREBASE_CONFIG);
+  const messaging = firebase.messaging();
+
+  messaging.onBackgroundMessage((payload) => {
+    const data = payload.data || {};
+    const title = data.title || "La Granja de la Abuela";
+    const options = {
+      body: data.body || "Tienes un aviso pendiente.",
+      icon: "./icon-192.png",
+      badge: "./icon-192.png",
+      tag: data.tag || "la-granja-aviso",
+      data: { url: data.url || "./?view=healthView" }
+    };
+    self.registration.showNotification(title, options);
+  });
+} catch (error) {
+  console.warn("Firebase Messaging no disponible todavía:", error);
+}
